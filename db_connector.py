@@ -50,6 +50,6 @@ class Sql_db:
         records_amount = self.mycursor.fetchall()
         print(records_amount)
         return records_amount
-        #end
+        
 
                 

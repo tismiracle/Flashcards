@@ -127,5 +127,4 @@ class FlashcardsMenu(Sql_db):
         self.scrollbar.destroy()
         self.tree.destroy()
         self.create_treeview()
-        #end
 
