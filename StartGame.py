@@ -102,3 +102,4 @@ class Start(Sql_db):
         congrats.pack()
         congratulations_label.pack()
         continue_button.pack(fill='x')
+        #end
