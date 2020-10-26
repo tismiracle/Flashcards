@@ -1,7 +1,8 @@
 import tkinter
 from FlashcardsAdder import *
 from StartGame import Start
-class Window:
+from db_connector import Sql_db
+class Window(Sql_db):
 
     def render_window(self):
         self.window_size = "400x400"
@@ -31,13 +32,25 @@ class Menu_Layout(Window):
         self.render_buttons()
         self.grid_buttons()
         self.create_label()
+
+    def check_start_state(self):
+        records = self.check_len_of_db()
+        print(records)
+        if records[0][0] > 0:
+            self.start.configure(state="active")
+        else:
+            self.start.configure(state="disabled")
+
         
 
     def render_buttons(self):
         self.clear_window()
+        
         self.start = tkinter.Button(text="Start", command=lambda: [Start(self.app, self.clear_window, self)])
         self.show = tkinter.Button(text="Show all flashcards", command=lambda: [self.clear_window(), self.flashcards_add.treeview()])
         self.exit = tkinter.Button(text="Exit", command = lambda: [self.app.quit(), self.app.destroy()])
+
+        self.check_start_state()
 
 
 
