@@ -1,18 +1,20 @@
 import mysql.connector
+import sqlite3
 
 class Sql_db:
     def connect_db(self):
-        self.mydb = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="root"
-        )
+        # self.mydb = mysql.connector.connect(
+        #     host="localhost",
+        #     user="root",
+        #     password="root"
+        # )
+        self.mydb = sqlite3.connect('flashcards')
         self.mycursor = self.mydb.cursor()
 
     def create_db(self):
-        self.mycursor.execute("CREATE DATABASE IF NOT EXISTS flashcards;")
+        # self.mycursor.execute("CREATE DATABASE IF NOT EXISTS flashcards;")
         self.mydb.commit()
-        self.mycursor.execute("USE flashcards;")
+        # self.mycursor.execute("USE flashcards;")
         self.mydb.commit()
         self.mycursor.execute("""        CREATE TABLE IF NOT EXISTS flashcards_examples (
             Row_ID int auto_increment 
@@ -25,12 +27,13 @@ class Sql_db:
         self.mydb.commit()
 
     def insert_to_db(self, word, meaning, note):
-        command = "INSERT INTO flashcards_examples (WORD, MEANING, NOTE) VALUES (%s, %s, %s);"
-        self.mycursor.execute(command, (word, meaning, note))
+        params = (word, meaning, note)
+        command = f"INSERT INTO flashcards_examples (WORD, MEANING, NOTE) VALUES ('{word}','{meaning}', '{note}');"
+        self.mycursor.execute(str(command))
         self.mydb.commit()
 
     def get_from_db(self, column, table):
-        self.mycursor.execute("USE flashcards;")
+        # self.mycursor.execute("USE flashcards;")
         self.mydb.commit()
         self.mycursor.execute(f"SELECT {column} FROM {table};")
 
