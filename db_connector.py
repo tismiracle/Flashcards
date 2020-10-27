@@ -1,4 +1,4 @@
-import mysql.connector
+
 import sqlite3
 
 class Sql_db:

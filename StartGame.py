@@ -28,7 +28,7 @@ class Start(Sql_db):
 
         self.answer = tkinter.Entry(entry_frame, font="Arial 24")
         back_button = tkinter.Button(entry_frame, text="Back", comman=lambda: self.goto_main())
-        skip_button = tkinter.Button(entry_frame, text="Skip")
+        skip_button = tkinter.Button(entry_frame, text="Skip", command=lambda: self.skip_flashcard())
         next_button = tkinter.Button(entry_frame, text="Next", command=lambda: [self.check_answer(self.i)])
 
         self.not_correct = tkinter.Label(not_correct_frame, text="Incorrect answer", fg="red")    
@@ -39,6 +39,7 @@ class Start(Sql_db):
         self.answer.pack(fill='x', expand=True, side='top')
 
         back_button.pack(fill='x', expand=True, side='left')
+        skip_button.pack(fill='x', expand=True, side='left')
         next_button.pack(fill='x', expand=True, side='right')
 
         locked_frame.pack(expand=True)
@@ -57,9 +58,7 @@ class Start(Sql_db):
             if self.i >= len(self.myresult):
                 self.clear_window()
                 self.congratulations()
-                # self.window.render_buttons()
-                # self.window.grid_buttons()
-                # self.window.create_label()
+
             else:
                 self.clear_window()
                 self.layout_of()
@@ -69,6 +68,11 @@ class Start(Sql_db):
         else:
             self.correct = False      
             self.not_correct.pack()
+
+    def skip_flashcard(self):
+        self.i += 1
+        self.clear_window()
+        self.layout_of()
 
     def goto_main(self):
         

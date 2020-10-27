@@ -1,4 +1,4 @@
-import mysql.connector
+
 from db_connector import Sql_db
 import tkinter
 from tkinter import ttk
