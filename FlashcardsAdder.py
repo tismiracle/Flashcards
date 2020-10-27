@@ -33,7 +33,7 @@ class FlashcardsMenu(Sql_db):
         
     def create_buttons(self):
         self.back = tkinter.Button(text="Go back", command =lambda: self.goto_main())
-        self.add_word = tkinter.Button(text="Add word", command = lambda: self.add_to_db())
+        self.add_word = tkinter.Button(text="Add word", command = lambda: [self.add_to_db(), self.refresh()])
 
     def create_labels(self):
         self.word = tkinter.Label(self.window, text="Word")       
@@ -57,6 +57,11 @@ class FlashcardsMenu(Sql_db):
         self.back.pack(fill='both', expand=True, side='left')
         self.add_word.pack(fill='both', expand=True, side='right')
 
+    def clear_entries(self):
+        self.word_entry.delete(0, 'end')
+        self.meaning_entry.delete(0, 'end')
+        self.note_entry.delete(0, 'end')
+
     def goto_flashcards_adder(self):
         self.clear_window()
         self.create_labels()
@@ -65,12 +70,10 @@ class FlashcardsMenu(Sql_db):
         self.pack_layout()
 
 
-
-
     def create_treeview_buttons(self):
         window_width = self.window.winfo_width()
         button_frame = tkinter.Frame(self.window, width = int(window_width*0.25))
-        self.add = tkinter.Button(button_frame, text="Add", command=lambda: [self.goto_flashcards_adder(), print(self.window.winfo_children())])
+        self.add = tkinter.Button(button_frame, text="Add", command=lambda: [self.goto_flashcards_adder()])
         self.add.pack(fill="both", expand=True)
 
         self.remove = tkinter.Button(button_frame, text="Remove", command=lambda: self.pass_to_remove())
@@ -127,4 +130,8 @@ class FlashcardsMenu(Sql_db):
         self.scrollbar.destroy()
         self.tree.destroy()
         self.create_treeview()
+
+    def refresh(self):
+        # self.clear_window()
+        self.clear_entries()
 
