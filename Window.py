@@ -45,9 +45,9 @@ class Menu_Layout(Window):
 
     def render_buttons(self):
         self.clear_window()
-        
+
+        self.show = tkinter.Button(text="Show all flashcards", command=lambda: [self.clear_window(), self.flashcards_add.treeview()])        
         self.start = tkinter.Button(text="Start", command=lambda: [Start(self.app, self.clear_window, self)])
-        self.show = tkinter.Button(text="Show all flashcards", command=lambda: [self.clear_window(), self.flashcards_add.treeview()])
         self.exit = tkinter.Button(text="Exit", command = lambda: [self.app.quit(), self.app.destroy()])
 
         self.check_start_state()
