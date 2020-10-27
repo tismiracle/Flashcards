@@ -44,12 +44,16 @@ class Sql_db:
         self.mycursor.execute(f"DELETE FROM flashcards_examples WHERE WORD = '{word}' AND MEANING = '{meaning}' and NOTE = '{note}';")
         self.mydb.commit()
 
+    def edit(self, word, meaning, note):
+        self.mycursor.execute(f"SELECT WORD, MEANING, NOTE FROM flashcards_examples WHERE WORD={word}, MEANING={meaning}, NOTE={note}")
+        self.mydb.commit()
+
     def check_len_of_db(self):
         self.connect_db()
         self.mycursor.execute("SELECT COUNT(WORD) AS amount FROM flashcards_examples;")
         records_amount = self.mycursor.fetchall()
         print(records_amount)
         return records_amount
-        
+    
 
                 

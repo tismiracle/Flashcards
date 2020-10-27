@@ -15,6 +15,7 @@ class FlashcardsMenu(Sql_db):
         self.create_db()
         self.mycursor = self.mydb.cursor()
         self.tree_buttons = False
+        self.edit_var = False
 
     def add_to_db(self):
         _word = self.word_entry.get()
@@ -63,6 +64,7 @@ class FlashcardsMenu(Sql_db):
         self.note_entry.delete(0, 'end')
 
     def goto_flashcards_adder(self):
+        self.edit_var = False
         self.clear_window()
         self.create_labels()
         self.place_entries()
@@ -75,6 +77,9 @@ class FlashcardsMenu(Sql_db):
         button_frame = tkinter.Frame(self.window, width = int(window_width*0.25))
         self.add = tkinter.Button(button_frame, text="Add", command=lambda: [self.goto_flashcards_adder()])
         self.add.pack(fill="both", expand=True)
+
+        self.edit = tkinter.Button(button_frame, text="Edit", command=lambda: self.edit_record())
+        self.edit.pack(fill="both", expand=True)
 
         self.remove = tkinter.Button(button_frame, text="Remove", command=lambda: self.pass_to_remove())
         self.remove.pack(fill="both", expand=True)
@@ -130,6 +135,24 @@ class FlashcardsMenu(Sql_db):
         self.scrollbar.destroy()
         self.tree.destroy()
         self.create_treeview()
+
+    def edit_record(self):
+         item_to_edit = self.tree.item(self.tree.focus())
+         self.clear_window()
+         self.goto_flashcards_adder()
+         self.add_word.destroy()
+         self.edit_word = tkinter.Button(text="Edit")
+         self.edit_word.pack(fill='both', expand=True, side='right')
+
+
+         self.edit_var = True
+         
+         self.word_entry.insert(0, f"{item_to_edit['values'][0]}")
+         
+         self.meaning_entry.insert(0, f"{item_to_edit['values'][1]}")
+         
+         self.note_entry.insert(0, f"{item_to_edit['values'][2]}")
+
 
     def refresh(self):
         # self.clear_window()
