@@ -27,7 +27,8 @@ class Start(Sql_db):
         note = tkinter.Label(locked_frame, text=f"Note:{self.myresult[self.i][3]}", font="Arial 24")
 
         self.answer = tkinter.Entry(entry_frame, font="Arial 24")
-        back_button = tkinter.Button(entry_frame, text="Back")
+        back_button = tkinter.Button(entry_frame, text="Back", comman=lambda: self.goto_main())
+        skip_button = tkinter.Button(entry_frame, text="Skip")
         next_button = tkinter.Button(entry_frame, text="Next", command=lambda: [self.check_answer(self.i)])
 
         self.not_correct = tkinter.Label(not_correct_frame, text="Incorrect answer", fg="red")    
@@ -46,6 +47,7 @@ class Start(Sql_db):
             
 
     def check_answer(self, i):
+        
         self.answer_check = self.answer.get()
         if self.answer_check == self.myresult[i][1]:
             if self.correct:
@@ -69,7 +71,7 @@ class Start(Sql_db):
             self.not_correct.pack()
 
     def goto_main(self):
-
+        
         self.window.render_buttons()
         self.window.grid_buttons()
         self.window.create_label()
@@ -102,3 +104,6 @@ class Start(Sql_db):
         congrats.pack()
         congratulations_label.pack()
         continue_button.pack(fill='x')
+
+    # def reset_correct_counter(self):
+    #     self.correct_counter = 0
