@@ -108,6 +108,3 @@ class Start(Sql_db):
         congrats.pack()
         congratulations_label.pack()
         continue_button.pack(fill='x')
-
-    # def reset_correct_counter(self):
-    #     self.correct_counter = 0

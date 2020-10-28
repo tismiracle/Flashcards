@@ -31,21 +31,21 @@ class FlashcardsMenu(Sql_db):
         self.menu.grid_buttons()
         self.menu.create_label()
 
-        
+
     def create_buttons(self):
         self.back = tkinter.Button(text="Go back", command =lambda: self.goto_main())
         self.add_word = tkinter.Button(text="Add word", command = lambda: [self.add_to_db(), self.refresh()])
 
     def create_labels(self):
-        self.word = tkinter.Label(self.window, text="Word")       
-        self.meaning = tkinter.Label(self.window, text="Meaning")        
-        self.note = tkinter.Label(self.window, text="Note")        
-      
+        self.word = tkinter.Label(self.window, text="Word")
+        self.meaning = tkinter.Label(self.window, text="Meaning")
+        self.note = tkinter.Label(self.window, text="Note")
+
 
     def place_entries(self):
-        self.word_entry = tkinter.Entry(self.window, font=('Arial 24'))     
-        self.meaning_entry = tkinter.Entry(self.window, font=('Arial 24'))        
-        self.note_entry = tkinter.Entry(self.window, font=('Arial 24'))        
+        self.word_entry = tkinter.Entry(self.window, font=('Arial 24'))
+        self.meaning_entry = tkinter.Entry(self.window, font=('Arial 24'))
+        self.note_entry = tkinter.Entry(self.window, font=('Arial 24'))
         print(self.window)
 
     def pack_layout(self):
@@ -85,24 +85,24 @@ class FlashcardsMenu(Sql_db):
         self.remove.pack(fill="both", expand=True)
 
         self.back = tkinter.Button(button_frame, text="Back", command=lambda: self.goto_main())
-        
+
         self.back.pack(fill="both", expand = True)
         button_frame.pack(side="right")
 
 
     def treeview(self):
         self.treeframe = tkinter.Frame(self.window)
-        self.create_treeview()        
+        self.create_treeview()
         self.create_treeview_buttons()
         self.treeframe.pack(side="left", fill="both", expand=True)
 
     def create_treeview(self):
         self.tree = ttk.Treeview(self.treeframe)
 
-        
+
         self.scrollbar = tkinter.Scrollbar(self.treeframe, orient="vertical", command=self.tree.yview)
         self.tree.configure(yscrollcommand=self.scrollbar.set)
-        
+
         self.tree["columns"]=("one","two","three")
         self.tree.column("#0", width=0, minwidth=0, stretch=tkinter.NO)
         self.tree.column("one",width=10, minwidth=1, stretch=tkinter.YES)
@@ -125,7 +125,7 @@ class FlashcardsMenu(Sql_db):
         item_to_delete = self.tree.item(self.tree.focus())
         print(item_to_delete)
         _word = item_to_delete["values"][0]
-        
+
         _meaning = item_to_delete["values"][1]
 
         _note = item_to_delete["values"][2]
@@ -140,21 +140,30 @@ class FlashcardsMenu(Sql_db):
          item_to_edit = self.tree.item(self.tree.focus())
          self.clear_window()
          self.goto_flashcards_adder()
+
          self.add_word.destroy()
-         self.edit_word = tkinter.Button(text="Edit")
+         self.edit_word = tkinter.Button(text="Edit", command=lambda: self.send_edited_to_db(item_to_edit['values'][0], item_to_edit['values'][1], item_to_edit['values'][2]))
          self.edit_word.pack(fill='both', expand=True, side='right')
 
 
          self.edit_var = True
-         
+
          self.word_entry.insert(0, f"{item_to_edit['values'][0]}")
-         
+
          self.meaning_entry.insert(0, f"{item_to_edit['values'][1]}")
-         
+
          self.note_entry.insert(0, f"{item_to_edit['values'][2]}")
+
+    def send_edited_to_db(self, word_before, meaning_before, note_before):
+        print(self.window.winfo_children())
+        _edited_word = self.word_entry.get()
+        _edited_meaning = self.meaning_entry.get()
+        _edited_note = self.note_entry.get()
+
+        self.edit_db(word_before, meaning_before, note_before, _edited_word, _edited_meaning, _edited_note)
+
 
 
     def refresh(self):
         # self.clear_window()
         self.clear_entries()
-
