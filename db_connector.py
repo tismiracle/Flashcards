@@ -1,5 +1,6 @@
 
 import sqlite3
+from tkinter import messagebox
 
 class Sql_db:
     def connect_db(self):
@@ -27,10 +28,10 @@ class Sql_db:
         self.mydb.commit()
 
     def insert_to_db(self, word, meaning, note):
-        params = (word, meaning, note)
-        command = f"INSERT INTO flashcards_examples (WORD, MEANING, NOTE) VALUES ('{word}','{meaning}', '{note}');"
-        self.mycursor.execute(str(command))
+        command = f"INSERT INTO flashcards_examples (WORD, MEANING, NOTE) VALUES ('{word}','{meaning}', '{note}');" 
+        self.mycursor.execute(command)
         self.mydb.commit()
+                
 
     def get_from_db(self, column, table):
         # self.mycursor.execute("USE flashcards;")
@@ -49,6 +50,8 @@ class Sql_db:
         self.mydb.commit()
         self.mycursor.execute(f"UPDATE flashcards_examples SET WORD = '{word}', MEANING = '{meaning}', NOTE = '{note}' WHERE WORD='{word_before}' AND MEANING='{meaning_before}' AND NOTE='{note_before}';")
         self.mydb.commit()
+
+
     def check_len_of_db(self):
         self.connect_db()
         self.mycursor.execute("SELECT COUNT(WORD) AS amount FROM flashcards_examples;")
