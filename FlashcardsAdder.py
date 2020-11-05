@@ -4,6 +4,9 @@ import tkinter
 from tkinter import ttk
 
 
+class FlashcardsMenuFunctions(Sql_db):
+    def __init__(self):
+        pass
 
 class FlashcardsMenu(Sql_db):
     def __init__(self, window, menu, clear_window):
@@ -174,8 +177,8 @@ class FlashcardsMenu(Sql_db):
 
         self.edit_db(word_before, meaning_before, note_before, _edited_word, _edited_meaning, _edited_note)
 
-
-
     def refresh(self):
         # self.clear_window()
         self.clear_entries()
+
+

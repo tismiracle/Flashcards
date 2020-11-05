@@ -4,13 +4,22 @@ from StartGame import Start
 from db_connector import Sql_db
 class Window(Sql_db):
 
+    # @property
+    # def window_size(self):
+    #     self.window_size = "400x400"
+    #     return self.window_size
+        # self.window_size_tuple = self.window_size.split('x')
+        # self.window_height = int(self.window_size_tuple[1])
+        # self.window_width = int(self.window_size_tuple[0])
+
+    def create_tk_instance(self):
+        self.app = tkinter.Tk()
+
     def render_window(self):
         self.window_size = "400x400"
-        self.window_size_tuple = self.window_size.split('x')
-        self.window_height = int(self.window_size_tuple[1])
-        self.window_width = int(self.window_size_tuple[0])
-        self.app = tkinter.Tk()
+        self.create_tk_instance()
         self.app.geometry(self.window_size)    
+
 
     def flashcards_adder(self):
         self.flashcards_add = FlashcardsMenu(self.app, self, self.clear_window)
@@ -27,15 +36,11 @@ class Menu_Layout(Window):
 
     def __init__(self):
         super().__init__()
-        self.render_window()
-        self.flashcards_adder()
-        self.render_buttons()
-        self.grid_buttons()
-        self.create_label()
 
-    def check_start_state(self):
+
+    def check_state_of_start_button(self):
         records = self.check_len_of_db()
-        print(records)
+        # print(records)
         if records[0][0] > 0:
             self.start.configure(state="active")
         else:
@@ -50,11 +55,12 @@ class Menu_Layout(Window):
         self.start = tkinter.Button(text="Start", command=lambda: [Start(self.app, self.clear_window, self)])
         self.exit = tkinter.Button(text="Exit", command = lambda: [self.app.quit(), self.app.destroy()])
 
-        self.check_start_state()
+        self.check_state_of_start_button()
 
 
 
     def grid_buttons(self):
+        #do zmiany
         _buttons = self.app.winfo_children() 
         for button in _buttons:
             button.pack(fill='both', expand=True)
@@ -63,6 +69,14 @@ class Menu_Layout(Window):
     def create_label(self):
         self.author = tkinter.Label(text="Created by Radosław Ryłko v 0.1")
         self.author.pack()
+
+    def start_program(self):
+        self.render_window()
+        self.flashcards_adder()
+        self.render_buttons()
+        self.grid_buttons()
+        self.create_label()
+        self.app.mainloop()
 
 
 

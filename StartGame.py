@@ -1,5 +1,6 @@
 import tkinter
 from tkinter import ttk
+import random
 from db_connector import Sql_db
 
 class Start(Sql_db):
@@ -9,6 +10,8 @@ class Start(Sql_db):
         self.app = app
         self.connect_db()
         self.myresult = self.get_from_db("*", "flashcards_examples")
+        
+        #random.shuffle(self.myresult)
         self.i = 0
         self.correct = True
         self.correct_counter = 0
@@ -23,6 +26,7 @@ class Start(Sql_db):
         not_correct_frame = tkinter.Frame(self.app, height=window_height//3)
         entry_frame = tkinter.Frame(self.app)
 
+        
         word = tkinter.Label(locked_frame, text=f"Meaning:{self.myresult[self.i][2]}", font="Arial 24")
         note = tkinter.Label(locked_frame, text=f"Note:{self.myresult[self.i][3]}", font="Arial 24")
 
