@@ -12,7 +12,7 @@ class Sql_db:
         self.mydb = sqlite3.connect('flashcards')
         self.mycursor = self.mydb.cursor()
 
-    def create_db(self):
+    def create_db_if_not_exists(self):
         # self.mycursor.execute("CREATE DATABASE IF NOT EXISTS flashcards;")
         self.mydb.commit()
         # self.mycursor.execute("USE flashcards;")

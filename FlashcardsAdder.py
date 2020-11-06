@@ -6,19 +6,8 @@ from tkinter import ttk
 
 class FlashcardsMenuFunctions(Sql_db):
     def __init__(self):
-        pass
-
-class FlashcardsMenu(Sql_db):
-    def __init__(self, window, menu, clear_window):
-        print("FlashcardsMenu initialized")
-        self.clear_window = clear_window
-        self.menu = menu
-        self.window = window
         self.connect_db()
-        self.create_db()
-        self.mycursor = self.mydb.cursor()
-        self.tree_buttons = False
-        self.edit_var = False
+        self.create_db_if_not_exists()
 
     def add_to_db(self):
         _word = self.word_entry.get()
@@ -26,6 +15,44 @@ class FlashcardsMenu(Sql_db):
         _note = self.note_entry.get()
         print(_word, _meaning, _note)
         self.insert_to_db(_word, _meaning, _note)
+
+    def pass_to_remove(self):
+        item_to_delete = self.tree.item(self.tree.focus())
+        # print(item_to_delete)
+        _word = item_to_delete["values"][0]
+
+        _meaning = item_to_delete["values"][1]
+
+        _note = item_to_delete["values"][2]
+
+        self.remove_from_db( _word, _meaning, _note)
+        self.myresult = self.mydb.commit()
+        self.scrollbar.destroy()
+        self.tree.destroy()
+        self.create_treeview()
+
+         
+    def send_edited_to_db(self, word_before, meaning_before, note_before):
+        print(self.window.winfo_children())
+        _edited_word = self.word_entry.get()
+        _edited_meaning = self.meaning_entry.get()
+        _edited_note = self.note_entry.get()
+
+        self.edit_db(word_before, meaning_before, note_before, _edited_word, _edited_meaning, _edited_note)
+
+#################################################################################################################################
+
+class FlashcardsMenu(FlashcardsMenuFunctions):
+    def __init__(self, window, menu, clear_window):
+        super().__init__()
+        
+        self.passed_clear_window_function = clear_window
+        self.menu = menu
+        self.window = window
+
+        self.mycursor = self.mydb.cursor()
+        self.tree_buttons = False
+        self.edit_var = False
         
 
 
@@ -38,7 +65,7 @@ class FlashcardsMenu(Sql_db):
 
     def create_buttons(self):
         self.back = tkinter.Button(text="Go back", command =lambda: self.goto_main())
-        self.add_word = tkinter.Button(text="Add word", command = lambda: [self.add_to_db(), self.refresh(), self.changes_applied_visible()])
+        self.add_word = tkinter.Button(text="Add word", command = lambda: [self.add_to_db(), self.clear_entries(), self.changes_applied_visible()])
         self.change_info = tkinter.Label(text="Waiting for changes")
         #width=width//3
 
@@ -79,7 +106,7 @@ class FlashcardsMenu(Sql_db):
 
     def goto_flashcards_adder(self):
         self.edit_var = False
-        self.clear_window()
+        self.passed_clear_window_function()
         self.create_labels()
         self.place_entries()
         self.create_buttons()
@@ -134,29 +161,13 @@ class FlashcardsMenu(Sql_db):
         self.tree.pack(fill="both", expand=True, side="left")
         self.scrollbar.pack(fill="both", side="right")
 
-
-    def pass_to_remove(self):
-        item_to_delete = self.tree.item(self.tree.focus())
-        print(item_to_delete)
-        _word = item_to_delete["values"][0]
-
-        _meaning = item_to_delete["values"][1]
-
-        _note = item_to_delete["values"][2]
-
-        self.remove_from_db( _word, _meaning, _note)
-        self.myresult = self.mydb.commit()
-        self.scrollbar.destroy()
-        self.tree.destroy()
-        self.create_treeview()
-
     def edit_record(self):
         item_to_edit = self.tree.item(self.tree.focus())
-        self.clear_window()
+        self.passed_clear_window_function()
         self.goto_flashcards_adder()
 
         self.add_word.destroy()
-        self.edit_word = tkinter.Button(text="Edit", command=lambda: [self.send_edited_to_db(item_to_edit['values'][0], item_to_edit['values'][1], item_to_edit['values'][2]), self.refresh(), self.changes_applied_visible()])
+        self.edit_word = tkinter.Button(text="Edit", command=lambda: [self.send_edited_to_db(item_to_edit['values'][0], item_to_edit['values'][1], item_to_edit['values'][2]), self.clear_entries(), self.changes_applied_visible()])
         self.edit_word.pack(fill='both', expand=True, side='right')
 
 
@@ -168,17 +179,10 @@ class FlashcardsMenu(Sql_db):
 
         self.note_entry.insert(0, f"{item_to_edit['values'][2]}")
 
-         
-    def send_edited_to_db(self, word_before, meaning_before, note_before):
-        print(self.window.winfo_children())
-        _edited_word = self.word_entry.get()
-        _edited_meaning = self.meaning_entry.get()
-        _edited_note = self.note_entry.get()
 
-        self.edit_db(word_before, meaning_before, note_before, _edited_word, _edited_meaning, _edited_note)
+
 
     def refresh(self):
-        # self.clear_window()
         self.clear_entries()
 
 

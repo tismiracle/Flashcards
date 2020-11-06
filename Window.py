@@ -2,15 +2,7 @@ import tkinter
 from FlashcardsAdder import *
 from StartGame import Start
 from db_connector import Sql_db
-class Window(Sql_db):
-
-    # @property
-    # def window_size(self):
-    #     self.window_size = "400x400"
-    #     return self.window_size
-        # self.window_size_tuple = self.window_size.split('x')
-        # self.window_height = int(self.window_size_tuple[1])
-        # self.window_width = int(self.window_size_tuple[0])
+class Window():
 
     def create_tk_instance(self):
         self.app = tkinter.Tk()
@@ -32,7 +24,7 @@ class Window(Sql_db):
 
 
     
-class Menu_Layout(Window):
+class Menu_Layout(Window, Sql_db):
 
     def __init__(self):
         super().__init__()
