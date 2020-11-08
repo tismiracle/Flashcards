@@ -1,6 +1,6 @@
 import tkinter
-from FlashcardsAdder import *
-from StartGame import Start
+from Flashcards_list import *
+from StartGame import Start_game
 from db_connector import Sql_db
 
 
@@ -44,7 +44,7 @@ class Menu_Layout():
 
     def start_button_commands(self):
         # Start(self.window.app, self.window.clear_window, self)
-        Start(self.window, self)
+        Start_game(self.window, self)
 
     def exit_button_commands(self):
         self.window.app.quit()

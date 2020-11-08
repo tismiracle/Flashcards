@@ -3,7 +3,7 @@ from tkinter import ttk
 import random
 from db_connector import Sql_db
 
-class Start(Sql_db):
+class Start_game(Sql_db):
     flashcard_num = 0
     correct = True
     correct_counter = 0
@@ -24,8 +24,8 @@ class Start(Sql_db):
         entry_frame = tkinter.Frame(self.window.app)
 
         
-        word = tkinter.Label(locked_frame, text=f"Meaning:{self.list_of_flashcards[self.flashcard_num][2]}", font="Arial 24")
-        note = tkinter.Label(locked_frame, text=f"Note:{self.list_of_flashcards[self.flashcard_num][3]}", font="Arial 24")
+        word = tkinter.Label(locked_frame, text=f"Meaning: {self.list_of_flashcards[self.flashcard_num][2]}", font="Arial 24")
+        note = tkinter.Label(locked_frame, text=f"Note: {self.list_of_flashcards[self.flashcard_num][3]}", font="Arial 24")
 
         self.answer = tkinter.Entry(entry_frame, font="Arial 24")
         back_button = tkinter.Button(entry_frame, text="Back", comman=lambda: self.goto_main())
@@ -93,8 +93,8 @@ class Start(Sql_db):
         return inner
     
     def game_endscreen_ui(self):
-        self.congrats_label = tkinter.Label(self.window.app, text="Congratulations!", font="Arial 30")
-        self.score_info_label = tkinter.Label(self.window.app, text=f"You've answered on: {self.correct_counter}/{len(self.list_of_flashcards)} flashcards correctly at the first time!", wraplength=400, justify='center', font="Arial 16")
+        self.congrats_label = tkinter.Label(self.window.app, text="That's all!", font="Arial 30")
+        self.score_info_label = tkinter.Label(self.window.app, text=f"You've answered on: {self.correct_counter}/{len(self.list_of_flashcards)} flashcards correctly at the first time", wraplength=400, justify='center', font="Arial 16")
         self.continue_button = tkinter.Button(self.window.app, command=lambda: [self.window.clear_window(), self.goto_main()])
 
     def pack_game_endscreen_ui(self):
@@ -111,17 +111,17 @@ class Start(Sql_db):
         sixth = "Really bad..."
 
         if self.score == 1:
-            continue_button.configure(text=first)
+            self.continue_button.configure(text=first)
         elif self.score >= 0.9 and self.score < 1:
-            continue_button.configure(text=second)
+            self.continue_button.configure(text=second)
         elif self.score >= 0.8 and self.score < 0.9:
-            continue_button.configure(text=third)
+            self.continue_button.configure(text=third)
         elif self.score >= 0.5 and self.score < 0.8:
-            continue_button.configure(text=fourth) 
+            self.continue_button.configure(text=fourth) 
         elif self.score >= 0.4 and self.score < 0.5:
-            continue_button.configure(text=fifth)  
+            self.continue_button.configure(text=fifth)  
         elif self.score < 0.4:
-            continue_button.configure(text=sixth) 
+            self.continue_button.configure(text=sixth) 
 
 
     @calculate_score
