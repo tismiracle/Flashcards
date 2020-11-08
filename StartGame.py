@@ -92,7 +92,7 @@ class Start(Sql_db):
         third = "Nice!"
         fourth = "Not bad!"
         fifth = "Could be better"
-        sixth = "Oh my gosh..."
+        sixth = "Really bad..."
         score = self.correct_counter/len(self.myresult)
         congrats = tkinter.Label(self.app, text="Congratulations!", font="Arial 30")
         congratulations_label = tkinter.Label(self.app, text=f"You've answered on: {self.correct_counter}/{len(self.myresult)} flashcards correctly at the first time!", wraplength=400, justify='center', font="Arial 16")

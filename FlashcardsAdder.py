@@ -4,12 +4,10 @@ import tkinter
 from tkinter import ttk
 
 
-# class FlashcardsMenuFunctions(Sql_db):
 class FlashcardsMenuFunctions():
     db_connector = Sql_db()
 
     def __init__(self):
-        # self.db_connector = Sql_db()
         self.db_connector.connect_db()
         self.db_connector.create_db_if_not_exists()
 
@@ -170,9 +168,12 @@ class FlashcardsMenu(FlashcardsMenuFunctions):
 
         for value, x in enumerate(self.load_flashcards()):
             self.tree.insert(parent="", index=value, values=(f"{x[1]}",f"{x[2]}",f"{x[3]}"))
+
         self.tree.pack(fill="both", expand=True, side="left")
         self.scrollbar.pack(fill="both", side="right")
+        
 
+        
     def edit_record(self):
         item_to_edit = self.tree.item(self.tree.focus())
 
@@ -180,7 +181,7 @@ class FlashcardsMenu(FlashcardsMenuFunctions):
         self.goto_flashcards_adder()
 
         self.add_word.destroy()
-        # self.edit_word = tkinter.Button(text="Edit", command=lambda: [self.send_edited_to_db(item_to_edit['values'][0], item_to_edit['values'][1], item_to_edit['values'][2]), self.clear_entries(), self.changes_applied_visible()])
+
         self.edit_word = tkinter.Button(text="Edit", command=lambda: self.edit_word_button_function(item_to_edit['values'][0], item_to_edit['values'][1], item_to_edit['values'][2]))
 
         self.edit_word.pack(fill='both', expand=True, side='right')
