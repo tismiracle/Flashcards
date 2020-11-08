@@ -10,7 +10,7 @@ class Window():
     def create_tk_instance(self):
         self.app = tkinter.Tk()
 
-    def clear_window(self):
+    def clear_window(self): 
         print("window cleared")
         _list = self.app.winfo_children()   
         for buttons in _list:

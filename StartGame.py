@@ -5,23 +5,19 @@ from db_connector import Sql_db
 
 class Start(Sql_db):
     flashcard_num = 0
+    correct = True
+    correct_counter = 0
 
     def __init__(self, window, menu_layout):
         self.window = window
         self.menu_layout = menu_layout
         self.connect_db()
-        self.list_of_flashcards = self.get_from_db("*", "flashcards_examples")
-        
-        #random.shuffle(self.myresult)
-        
-        self.correct = True
-        self.correct_counter = 0
+        self.list_of_flashcards = self.get_from_db("*", "flashcards_examples")        
+        #random.shuffle(self.myresult)    
         self.window.clear_window()
         self.render_game_ui()
             
-    def render_game_ui(self):
-        
-        
+    def render_game_ui(self):        
         window_height = self.window.app.winfo_height()
         locked_frame = tkinter.Frame(self.window.app, height = window_height//2)
         not_correct_frame = tkinter.Frame(self.window.app, height=window_height//3)
@@ -65,16 +61,13 @@ class Start(Sql_db):
         if self.flashcard_num >= len(self.list_of_flashcards):
             self.window.clear_window()
             self.congratulations()
-
         else:
             self.window.clear_window()
             self.render_game_ui()
             self.correct = True
 
-    def next_button_function(self):
-        
+    def next_button_function(self):        
         self.answer_check = self.answer.get()
-
         self.check_if_correct()
 
     def skip_flashcard(self):
@@ -93,30 +86,46 @@ class Start(Sql_db):
         self.menu_layout.create_label()
 
 
-            
-    def congratulations(self):
+    def calculate_score(func):
+        def inner(self):
+            self.score = self.correct_counter/len(self.list_of_flashcards)
+            func(self)
+        return inner
+    
+    def game_endscreen_ui(self):
+        self.congrats_label = tkinter.Label(self.window.app, text="Congratulations!", font="Arial 30")
+        self.score_info_label = tkinter.Label(self.window.app, text=f"You've answered on: {self.correct_counter}/{len(self.list_of_flashcards)} flashcards correctly at the first time!", wraplength=400, justify='center', font="Arial 16")
+        self.continue_button = tkinter.Button(self.window.app, command=lambda: [self.window.clear_window(), self.goto_main()])
+
+    def pack_game_endscreen_ui(self):
+        self.congrats_label.pack()
+        self.score_info_label.pack()
+        self.continue_button.pack(fill='x')
+
+    def get_button_answer_depending_on_score(self):
         first = "Perfect!"
         second = "Very good!"
         third = "Nice!"
         fourth = "Not bad!"
         fifth = "Could be better"
         sixth = "Really bad..."
-        score = self.correct_counter/len(self.list_of_flashcards)
-        congrats = tkinter.Label(self.window.app, text="Congratulations!", font="Arial 30")
-        congratulations_label = tkinter.Label(self.window.app, text=f"You've answered on: {self.correct_counter}/{len(self.list_of_flashcards)} flashcards correctly at the first time!", wraplength=400, justify='center', font="Arial 16")
-        continue_button = tkinter.Button(self.window.app, command=lambda: [self.window.clear_window(), self.goto_main()])
-        if score == 1:
+
+        if self.score == 1:
             continue_button.configure(text=first)
-        elif score >= 0.9 and score < 1:
+        elif self.score >= 0.9 and self.score < 1:
             continue_button.configure(text=second)
-        elif score >= 0.8 and score < 0.9:
+        elif self.score >= 0.8 and self.score < 0.9:
             continue_button.configure(text=third)
-        elif score >= 0.5 and score < 0.8:
+        elif self.score >= 0.5 and self.score < 0.8:
             continue_button.configure(text=fourth) 
-        elif score >= 0.4 and score < 0.5:
+        elif self.score >= 0.4 and self.score < 0.5:
             continue_button.configure(text=fifth)  
-        elif score < 0.4:
-            continue_button.configure(text=sixth)               
-        congrats.pack()
-        congratulations_label.pack()
-        continue_button.pack(fill='x')
+        elif self.score < 0.4:
+            continue_button.configure(text=sixth) 
+
+
+    @calculate_score
+    def congratulations(self):
+        self.game_endscreen_ui()
+        self.get_button_answer_depending_on_score()
+        self.pack_game_endscreen_ui()
