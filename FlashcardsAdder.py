@@ -11,14 +11,14 @@ class FlashcardsMenuFunctions():
         self.db_connector.connect_db()
         self.db_connector.create_db_if_not_exists()
 
-    def add_to_db(self):
+    def pass_to_add_to_db(self):
         _word = self.word_entry.get()
         _meaning = self.meaning_entry.get()
         _note = self.note_entry.get()
         print(_word, _meaning, _note)
         self.db_connector.insert_to_db(_word, _meaning, _note)
 
-    def pass_to_remove(self):
+    def pass_to_remove_from_db(self):
         item_to_delete = self.tree.item(self.tree.focus())
 
         _word = item_to_delete["values"][0]
@@ -52,7 +52,7 @@ class FlashcardsMenuFunctions():
         self.note_entry.delete(0, 'end')
 
     def add_word_button_function(self):
-        self.add_to_db()
+        self.pass_to_add_to_db()
         self.clear_entries()
         self.changes_applied_visible()
 
@@ -133,7 +133,7 @@ class FlashcardsMenu(FlashcardsMenuFunctions):
         self.edit = tkinter.Button(button_frame, text="Edit", command=lambda: self.edit_record())
         self.edit.pack(fill="both", expand=True)
 
-        self.remove = tkinter.Button(button_frame, text="Remove", command=lambda: self.pass_to_remove())
+        self.remove = tkinter.Button(button_frame, text="Remove", command=lambda: self.pass_to_remove_from_db())
         self.remove.pack(fill="both", expand=True)
 
         self.back = tkinter.Button(button_frame, text="Back", command=lambda: self.goto_main())
