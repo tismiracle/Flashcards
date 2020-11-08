@@ -2,6 +2,10 @@ import sqlite3
 from tkinter import messagebox
 
 class Sql_db:
+
+    def __init__(self):
+        self.connect_db()
+        
     def connect_db(self):
         # self.mydb = mysql.connector.connect(
         #     host="localhost",
@@ -34,7 +38,8 @@ class Sql_db:
 
     def get_from_db(self, column, table):
         # self.mycursor.execute("USE flashcards;")
-        self.mydb.commit()
+        # self.mydb.commit()
+        
         self.mycursor.execute(f"SELECT {column} FROM {table};")
         myresult = self.mycursor.fetchall()
         return myresult

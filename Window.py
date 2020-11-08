@@ -2,6 +2,8 @@ import tkinter
 from FlashcardsAdder import *
 from StartGame import Start
 from db_connector import Sql_db
+
+
 class Window():
     window_size = "400x400"
 
@@ -17,6 +19,8 @@ class Window():
     def render_window(self):
         self.create_tk_instance()
         self.app.geometry(self.window_size)
+
+#######################################################################################################################
     
 class Menu_Layout():
 

@@ -4,17 +4,23 @@ import tkinter
 from tkinter import ttk
 
 
-class FlashcardsMenuFunctions(Sql_db):
+# class FlashcardsMenuFunctions(Sql_db):
+class FlashcardsMenuFunctions():
     def __init__(self):
-        self.connect_db()
-        self.create_db_if_not_exists()
+        self.db_connector = Sql_db()
+
+        self.db_connector.connect_db()
+        # self.connect_db()
+        # self.create_db_if_not_exists()
+        self.db_connector.create_db_if_not_exists()
 
     def add_to_db(self):
         _word = self.word_entry.get()
         _meaning = self.meaning_entry.get()
         _note = self.note_entry.get()
         print(_word, _meaning, _note)
-        self.insert_to_db(_word, _meaning, _note)
+        # self.insert_to_db(_word, _meaning, _note)
+        self.db_connector.insert_to_db(_word, _meaning, _note)
 
     def pass_to_remove(self):
         item_to_delete = self.tree.item(self.tree.focus())
@@ -25,8 +31,9 @@ class FlashcardsMenuFunctions(Sql_db):
 
         _note = item_to_delete["values"][2]
 
-        self.remove_from_db( _word, _meaning, _note)
-        self.myresult = self.mydb.commit()
+        # self.remove_from_db( _word, _meaning, _note)
+        self.db_connector.remove_from_db( _word, _meaning, _note)
+        # self.myresult = self.mydb.commit()
         self.scrollbar.destroy()
         self.tree.destroy()
         self.create_treeview()
@@ -38,19 +45,23 @@ class FlashcardsMenuFunctions(Sql_db):
         _edited_meaning = self.meaning_entry.get()
         _edited_note = self.note_entry.get()
 
-        self.edit_db(word_before, meaning_before, note_before, _edited_word, _edited_meaning, _edited_note)
+        # self.edit_db(word_before, meaning_before, note_before, _edited_word, _edited_meaning, _edited_note)
+        self.db_connector.edit_db(word_before, meaning_before, note_before, _edited_word, _edited_meaning, _edited_note)
+
+    def load_flashcards(self):
+        db_records = self.db_connector.get_from_db("*","flashcards_examples")
+        return db_records
 
 #################################################################################################################################
 
 class FlashcardsMenu(FlashcardsMenuFunctions):
     def __init__(self, window, menu, clear_window):
         super().__init__()
-        
         self.passed_clear_window_function = clear_window
         self.menu = menu
         self.window = window
 
-        self.mycursor = self.mydb.cursor()
+        # self.mycursor = self.mydb.cursor()
         self.tree_buttons = False
         self.edit_var = False
         
@@ -154,8 +165,11 @@ class FlashcardsMenu(FlashcardsMenuFunctions):
         self.tree.heading("three", text="Note",anchor=tkinter.W)
 
 
-        self.myresult = self.get_from_db("*","flashcards_examples")
-        for value, x in enumerate(self.myresult):
+        # self.myresult = self.get_from_db("*","flashcards_examples")
+        
+
+        # for value, x in enumerate(self.myresult):
+        for value, x in enumerate(self.load_flashcards()):
             self.tree.insert(parent="", index=value, values=(f"{x[1]}",f"{x[2]}",f"{x[3]}"))
         self.tree.pack(fill="both", expand=True, side="left")
         self.scrollbar.pack(fill="both", side="right")
