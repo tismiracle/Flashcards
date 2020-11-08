@@ -1,4 +1,3 @@
-
 import sqlite3
 from tkinter import messagebox
 
@@ -9,7 +8,7 @@ class Sql_db:
         #     user="root",
         #     password="root"
         # )
-        self.mydb = sqlite3.connect('flashcards')
+        self.mydb = sqlite3.connect('flashcards.db3')
         self.mycursor = self.mydb.cursor()
 
     def create_db_if_not_exists(self):
@@ -37,7 +36,6 @@ class Sql_db:
         # self.mycursor.execute("USE flashcards;")
         self.mydb.commit()
         self.mycursor.execute(f"SELECT {column} FROM {table};")
-
         myresult = self.mycursor.fetchall()
         return myresult
 

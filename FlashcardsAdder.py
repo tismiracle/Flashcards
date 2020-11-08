@@ -57,7 +57,6 @@ class FlashcardsMenu(FlashcardsMenuFunctions):
 
 
     def goto_main(self):
-
         self.menu.render_buttons()
         self.menu.grid_buttons()
         self.menu.create_label()

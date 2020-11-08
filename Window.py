@@ -3,18 +3,10 @@ from FlashcardsAdder import *
 from StartGame import Start
 from db_connector import Sql_db
 class Window():
+    window_size = "400x400"
 
     def create_tk_instance(self):
         self.app = tkinter.Tk()
-
-    def render_window(self):
-        self.window_size = "400x400"
-        self.create_tk_instance()
-        self.app.geometry(self.window_size)    
-
-
-    def flashcards_adder(self):
-        self.flashcards_add = FlashcardsMenu(self.app, self, self.clear_window)
 
     def clear_window(self):
         print("window cleared")
@@ -22,30 +14,44 @@ class Window():
         for buttons in _list:
             buttons.destroy()
 
-
+    def render_window(self):
+        self.create_tk_instance()
+        self.app.geometry(self.window_size)
     
-class Menu_Layout(Window, Sql_db):
+class Menu_Layout():
 
     def __init__(self):
-        super().__init__()
-
+        self.window = Window()
+        self.db_connector = Sql_db()
+    
+    def create_flashcards_list_menu_instance(self):
+        self.flashcards_list_menu_instance = FlashcardsMenu(self.window.app, self, self.window.clear_window)
 
     def check_state_of_start_button(self):
-        records = self.check_len_of_db()
-        # print(records)
+        records = self.db_connector.check_len_of_db()
         if records[0][0] > 0:
             self.start.configure(state="active")
         else:
             self.start.configure(state="disabled")
 
+    def show_list_button_commands(self):
+        self.window.clear_window()
+        self.flashcards_list_menu_instance.treeview()
+
+    def start_button_commands(self):
+        Start(self.window.app, self.window.clear_window, self)
+
+    def exit_button_commands(self):
+        self.window.app.quit()
+        self.window.app.destroy()
         
 
     def render_buttons(self):
-        self.clear_window()
+        self.window.clear_window()
 
-        self.show = tkinter.Button(text="Show all flashcards", command=lambda: [self.clear_window(), self.flashcards_add.treeview()])        
-        self.start = tkinter.Button(text="Start", command=lambda: [Start(self.app, self.clear_window, self)])
-        self.exit = tkinter.Button(text="Exit", command = lambda: [self.app.quit(), self.app.destroy()])
+        self.show_list = tkinter.Button(text="Show all flashcards", command=lambda: self.show_list_button_commands())        
+        self.start = tkinter.Button(text="Start", command=lambda: self.start_button_commands())
+        self.exit = tkinter.Button(text="Exit", command = lambda: self.exit_button_commands())
 
         self.check_state_of_start_button()
 
@@ -53,22 +59,23 @@ class Menu_Layout(Window, Sql_db):
 
     def grid_buttons(self):
         #do zmiany
-        _buttons = self.app.winfo_children() 
+        _buttons = self.window.app.winfo_children() 
         for button in _buttons:
             button.pack(fill='both', expand=True)
             
 
     def create_label(self):
-        self.author = tkinter.Label(text="Created by Radosław Ryłko v 0.1")
+        self.author = tkinter.Label(text="Created by Radosław Ryłko")
         self.author.pack()
 
     def start_program(self):
-        self.render_window()
-        self.flashcards_adder()
+        self.window.render_window()
+        self.create_flashcards_list_menu_instance()
         self.render_buttons()
         self.grid_buttons()
         self.create_label()
-        self.app.mainloop()
+        self.window.app.mainloop()
+
 
 
 
