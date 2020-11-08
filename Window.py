@@ -43,7 +43,8 @@ class Menu_Layout():
         self.flashcards_list_menu_instance.treeview()
 
     def start_button_commands(self):
-        Start(self.window.app, self.window.clear_window, self)
+        # Start(self.window.app, self.window.clear_window, self)
+        Start(self.window, self)
 
     def exit_button_commands(self):
         self.window.app.quit()
