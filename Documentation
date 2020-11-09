@@ -1,0 +1,75 @@
+Flashcards
+
+<main.py>
+From that file you can launch the program.
+
+<Window.py>
+File in which there are two classes. Window() and Menu_Layout(). Window() declares everything which is related to the window widgets, window settings like window height and window width. Menu_Layout() is mostly for its UI and for the functionality.
+
+
+Window()
+Functions inside
+
+1. create_tk_instance()
+
+Function to create tkinter instance which is required to generate window.
+	
+2. clear_window()
+
+Deletes all the widgets inside the window. Used to refresh the content of the window.
+	
+3. render_window()
+
+Function to render a window and to declare the size of it.
+
+
+Menu_Layout()
+
+1. __init__
+
+Initiates Window() to generate the window and connects SQLite database from db_connector() class.
+
+2. create_flashcards_list_menu_instance()
+
+It creates the object of the flashcards list class in which you can add, modify, delete and edit SQLite records.
+
+3. check_state_of_start_button()
+
+Function used to check if there are any records in the database. If there are no records "Start" button stays inactive.
+
+4. show_list_button_commands()
+
+Method which combines all the functions which are used in "show_list" button. Function created to abbreviate "show_list" button function into one to make it more readable. Without that the key of "show_list" button would be way longer.
+
+5. start_button_commands()
+
+Method which is used to begin the game. 
+
+6. exit_button_commands()
+
+Method which destroys all widgets and window.
+
+7. render_buttons()
+
+It initiate all the buttons used in main menu.
+
+8. grid_buttons()
+
+Function which allows to generate the buttons on the screen.
+
+9. create_label()
+
+Generates and displays the label with the name of the author
+
+10. start_program()
+
+It starts the program.
+
+
+...
+
+
+
+
+
+	
