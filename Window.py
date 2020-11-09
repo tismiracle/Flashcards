@@ -29,7 +29,7 @@ class Menu_Layout():
         self.db_connector = Sql_db()
     
     def create_flashcards_list_menu_instance(self):
-        self.flashcards_list_menu_instance = FlashcardsMenu(self.window, self)
+        self.flashcards_list_menu_instance = Flashcards_List(self.window, self)
 
     def check_state_of_start_button(self):
         records = self.db_connector.check_len_of_db()

@@ -4,7 +4,7 @@ import tkinter
 from tkinter import ttk
 
 
-class FlashcardsMenuFunctions():
+class Flashcards_List_Functions():
     db_connector = Sql_db()
 
     def __init__(self):
@@ -63,7 +63,7 @@ class FlashcardsMenuFunctions():
 
 #################################################################################################################################
 
-class FlashcardsMenu(FlashcardsMenuFunctions):
+class Flashcards_List(Flashcards_List_Functions):
     tree_buttons = False
     edit_var = False
 
