@@ -64,8 +64,8 @@ class Flashcards_List_Functions():
 #################################################################################################################################
 
 class Flashcards_List(Flashcards_List_Functions):
-    tree_buttons = False
-    edit_var = False
+    # tree_buttons = False
+    # edit_var = False
 
     def __init__(self, window, menu_layout):
         super().__init__()
@@ -82,13 +82,14 @@ class Flashcards_List(Flashcards_List_Functions):
     def create_buttons(self):
         self.back = tkinter.Button(text="Go back", command =lambda: self.goto_main())
         self.add_word = tkinter.Button(text="Add word", command = lambda: self.add_word_button_function())
-        self.change_info = tkinter.Label(text="Waiting for changes")
+        
 
 
     def changes_applied_visible(self):
         self.change_info.configure(text="Changes applied")
 
     def create_labels(self):
+        self.change_info = tkinter.Label(text="Waiting for changes")
         self.word_label = tkinter.Label(self.window.app, text="Word")
         self.meaning_label = tkinter.Label(self.window.app, text="Meaning")
         self.note_label = tkinter.Label(self.window.app, text="Note")
@@ -109,12 +110,11 @@ class Flashcards_List(Flashcards_List_Functions):
 
         self.back.pack(fill='both', expand=True, side='left')
         self.change_info.pack(fill='both', expand=True, side='left')
-        self.add_word.pack(fill='both', expand=True, side='left')
-        
+        self.add_word.pack(fill='both', expand=True, side='left')        
 
 
     def goto_flashcards_adder(self):
-        self.edit_var = False
+        # self.edit_var = False
         self.window.clear_window()
         self.create_labels()
         self.place_entries()
@@ -136,8 +136,11 @@ class Flashcards_List(Flashcards_List_Functions):
         self.remove = tkinter.Button(button_frame, text="Remove", command=lambda: self.pass_to_remove_from_db())
         self.remove.pack(fill="both", expand=True)
 
-        self.back = tkinter.Button(button_frame, text="Back", command=lambda: self.goto_main())
+        self.export_to_csv = tkinter.Button(button_frame, text="Export to CSV")
+        self.export_to_csv.pack(fill='both', expand=True)
 
+
+        self.back = tkinter.Button(button_frame, text="Back", command=lambda: self.goto_main())
         self.back.pack(fill="both", expand = True)
         button_frame.pack(side="right")
 
@@ -187,7 +190,7 @@ class Flashcards_List(Flashcards_List_Functions):
         self.edit_word.pack(fill='both', expand=True, side='right')
 
 
-        self.edit_var = True
+        # self.edit_var = True
 
         self.word_entry.insert(0, f"{item_to_edit['values'][0]}")
 
