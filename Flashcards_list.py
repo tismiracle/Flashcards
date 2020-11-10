@@ -69,6 +69,9 @@ class Flashcards_List_Functions():
             csv_writer = csv.writer(csvfile, delimiter=",")
             for words in table:
                 csv_writer.writerow(words[1:])  #doing it because the first record in list is None. I'll change it later.
+    
+    def load_from_csv(self):
+        pass
 
 
 #################################################################################################################################
