@@ -20,15 +20,22 @@ class Flashcards_List_Functions():
         self.db_connector.insert_to_db(_word, _meaning, _note)
 
     def pass_to_remove_from_db(self):
-        item_to_delete = self.tree.item(self.tree.focus())
+        # item_to_delete = self.tree.item(self.tree.focus())
 
-        _word = item_to_delete["values"][0]
+        item_to_delete = self.tree.selection()
+        for item in item_to_delete:
+            # print(self.tree.item(item))
+            item = self.tree.item(item)
+            # print(item)
+            _word = item["values"][0]
 
-        _meaning = item_to_delete["values"][1]
+            _meaning = item["values"][1]
 
-        _note = item_to_delete["values"][2]
+            _note = item["values"][2]
 
-        self.db_connector.remove_from_db( _word, _meaning, _note)
+            self.db_connector.remove_from_db( _word, _meaning, _note)
+        
+
 
         self.scrollbar.destroy()
         self.tree.destroy()
@@ -174,7 +181,11 @@ class Flashcards_List(Flashcards_List_Functions):
 
         self.back = tkinter.Button(button_frame, text="Back", command=lambda: self.goto_main())
         self.back.pack(fill="both", expand = True)
+
+
         button_frame.pack(side="right")
+
+        
 
 
     def treeview(self):
@@ -184,20 +195,20 @@ class Flashcards_List(Flashcards_List_Functions):
         self.treeframe.pack(side="left", fill="both", expand=True)
 
     def create_treeview(self):
-        self.tree = ttk.Treeview(self.treeframe)
+        self.tree = ttk.Treeview(self.treeframe, selectmode="extended")
 
         self.scrollbar = tkinter.Scrollbar(self.treeframe, orient="vertical", command=self.tree.yview)
         self.tree.configure(yscrollcommand=self.scrollbar.set)
 
-        self.tree["columns"]=("one","two","three")
+        self.tree["columns"]=("word","meaning","note")
         self.tree.column("#0", width=0, minwidth=0, stretch=tkinter.NO)
-        self.tree.column("one",width=10, minwidth=1, stretch=tkinter.YES)
-        self.tree.column("two",width=10, minwidth=1)
-        self.tree.column("three",width=10, minwidth=1, stretch=tkinter.YES)
+        self.tree.column("word",width=10, minwidth=1, stretch=tkinter.YES)
+        self.tree.column("meaning",width=10, minwidth=1)
+        self.tree.column("note",width=10, minwidth=1, stretch=tkinter.YES)
 
-        self.tree.heading("one", text="Word",anchor=tkinter.W)
-        self.tree.heading("two", text="Meaning",anchor=tkinter.W)
-        self.tree.heading("three", text="Note",anchor=tkinter.W)
+        self.tree.heading("word", text="Word",anchor=tkinter.W)
+        self.tree.heading("meaning", text="Meaning",anchor=tkinter.W)
+        self.tree.heading("note", text="Note",anchor=tkinter.W)
 
 
 
