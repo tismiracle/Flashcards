@@ -63,10 +63,12 @@ class Flashcards_List_Functions():
 
     def export_to_csv(self):
         import csv
-        table = ["test","test1","test2"]
+        table = self.db_connector.get_from_db("*", "flashcards_examples")
+        print(table)
         with open("flashcards.csv", "w") as csvfile:
             csv_writer = csv.writer(csvfile, delimiter=",")
-            csv_writer.writerow(table)
+            for words in table:
+                csv_writer.writerow(words[1:])  #doing it because the first record in list is None. I'll change it later.
 
 
 #################################################################################################################################
