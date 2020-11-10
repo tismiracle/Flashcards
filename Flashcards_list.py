@@ -2,7 +2,8 @@
 from db_connector import Sql_db
 import tkinter
 from tkinter import ttk
-
+import csv
+import os
 
 class Flashcards_List_Functions():
     db_connector = Sql_db()
@@ -62,16 +63,31 @@ class Flashcards_List_Functions():
         self.changes_applied_visible()
 
     def export_to_csv(self):
-        import csv
+        
         table = self.db_connector.get_from_db("*", "flashcards_examples")
         print(table)
-        with open("flashcards.csv", "w") as csvfile:
-            csv_writer = csv.writer(csvfile, delimiter=",")
+        with open("flashcards.csv", "w") as csvfile_write:
+            csv_writer = csv.writer(csvfile_write, delimiter=",")
             for words in table:
                 csv_writer.writerow(words[1:])  #doing it because the first record in list is None. I'll change it later.
     
     def load_from_csv(self):
-        pass
+        from tkinter import filedialog
+        my_filetype = [('CSV file', '.csv')]
+
+        csv_file = filedialog.askopenfilename(parent=self.window.app,
+                                    initialdir=os.getcwd(),
+                                    title="Please select a file:",
+                                    filetypes=my_filetype)
+
+        print(csv_file)
+
+        with open(csv_file, "r") as myfile:
+            csv_reader = csv.reader(myfile, delimiter=",")
+            for row in csv_reader:
+                self.db_connector.insert_to_db(row[0],row[1],row[2])
+        self.window.clear_window()
+        self.treeview()
 
 
 #################################################################################################################################
@@ -151,6 +167,9 @@ class Flashcards_List(Flashcards_List_Functions):
 
         self.export_to_csv_button = tkinter.Button(button_frame, text="Export to CSV", command=lambda: self.export_to_csv())
         self.export_to_csv_button.pack(fill='both', expand=True)
+
+        self.load_from_csv_button = tkinter.Button(button_frame, text="Load from CSV", command=lambda: self.load_from_csv())
+        self.load_from_csv_button.pack(fill='both', expand=True)
 
 
         self.back = tkinter.Button(button_frame, text="Back", command=lambda: self.goto_main())
