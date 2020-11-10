@@ -61,6 +61,14 @@ class Flashcards_List_Functions():
         self.clear_entries()
         self.changes_applied_visible()
 
+    def export_to_csv(self):
+        import csv
+        table = ["test","test1","test2"]
+        with open("flashcards.csv", "w") as csvfile:
+            csv_writer = csv.writer(csvfile, delimiter=",")
+            csv_writer.writerow(table)
+
+
 #################################################################################################################################
 
 class Flashcards_List(Flashcards_List_Functions):
@@ -136,8 +144,8 @@ class Flashcards_List(Flashcards_List_Functions):
         self.remove = tkinter.Button(button_frame, text="Remove", command=lambda: self.pass_to_remove_from_db())
         self.remove.pack(fill="both", expand=True)
 
-        self.export_to_csv = tkinter.Button(button_frame, text="Export to CSV")
-        self.export_to_csv.pack(fill='both', expand=True)
+        self.export_to_csv_button = tkinter.Button(button_frame, text="Export to CSV", command=lambda: self.export_to_csv())
+        self.export_to_csv_button.pack(fill='both', expand=True)
 
 
         self.back = tkinter.Button(button_frame, text="Back", command=lambda: self.goto_main())
