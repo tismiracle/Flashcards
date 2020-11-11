@@ -5,18 +5,13 @@ class Sql_db:
 
     def __init__(self):
         self.connect_db()
+        self.create_db_if_not_exists()
         
     def connect_db(self):
-        # self.mydb = mysql.connector.connect(
-        #     host="localhost",
-        #     user="root",
-        #     password="root"
-        # )
         self.mydb = sqlite3.connect('flashcards.db3')
         self.mycursor = self.mydb.cursor()
 
     def create_db_if_not_exists(self):
-        # self.mycursor.execute("CREATE DATABASE IF NOT EXISTS flashcards;")
         self.mydb.commit()
         # self.mycursor.execute("USE flashcards;")
         self.mydb.commit()
@@ -37,8 +32,6 @@ class Sql_db:
                 
 
     def get_from_db(self, column, table):
-        # self.mycursor.execute("USE flashcards;")
-        # self.mydb.commit()
         
         self.mycursor.execute(f"SELECT {column} FROM {table};")
         myresult = self.mycursor.fetchall()

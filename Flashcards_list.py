@@ -8,25 +8,11 @@ import os
 class Flashcards_List_Functions():
     db_connector = Sql_db()
 
-    def __init__(self):
-        self.db_connector.connect_db()
-        self.db_connector.create_db_if_not_exists()
-
-    def pass_to_add_to_db(self):
-        _word = self.word_entry.get()
-        _meaning = self.meaning_entry.get()
-        _note = self.note_entry.get()
-        print(_word, _meaning, _note)
-        self.db_connector.insert_to_db(_word, _meaning, _note)
-
     def pass_to_remove_from_db(self):
-        # item_to_delete = self.tree.item(self.tree.focus())
 
         item_to_delete = self.tree.selection()
         for item in item_to_delete:
-            # print(self.tree.item(item))
             item = self.tree.item(item)
-            # print(item)
             _word = item["values"][0]
 
             _meaning = item["values"][1]
@@ -41,33 +27,12 @@ class Flashcards_List_Functions():
         self.tree.destroy()
         self.create_treeview()
 
-         
-    def send_edited_to_db(self, word_before, meaning_before, note_before):
-        print(self.window.app.winfo_children())
-        _edited_word = self.word_entry.get()
-        _edited_meaning = self.meaning_entry.get()
-        _edited_note = self.note_entry.get()
-
-        self.db_connector.edit_db(word_before, meaning_before, note_before, _edited_word, _edited_meaning, _edited_note)
 
     def load_flashcards(self):
         db_records = self.db_connector.get_from_db("*","flashcards_examples")
         return db_records
 
-    def clear_entries(self):
-        self.word_entry.delete(0, 'end')
-        self.meaning_entry.delete(0, 'end')
-        self.note_entry.delete(0, 'end')
 
-    def add_word_button_function(self):
-        self.pass_to_add_to_db()
-        self.clear_entries()
-        self.changes_applied_visible()
-
-    def edit_word_button_function(self, edited_word, edited_meaning, edited_note):
-        self.send_edited_to_db(edited_word, edited_meaning, edited_note)
-        self.clear_entries()
-        self.changes_applied_visible()
 
     def export_to_csv(self):
         
@@ -79,6 +44,7 @@ class Flashcards_List_Functions():
                 csv_writer.writerow(words[1:])  #doing it because the first record in list is None. I'll change it later.
     
     def load_from_csv(self):
+        print(self.tree)
         from tkinter import filedialog
         my_filetype = [('CSV file', '.csv')]
 
@@ -93,69 +59,40 @@ class Flashcards_List_Functions():
             csv_reader = csv.reader(myfile, delimiter=",")
             for row in csv_reader:
                 self.db_connector.insert_to_db(row[0],row[1],row[2])
+
         self.window.clear_window()
         self.treeview()
 
 
+    #needed to be implemented
+    def search_db(self, search):
+        word_table = self.db_connector.get_from_db("*", "flashcards_examples")
+        pass
+
+
+        
+
+
 #################################################################################################################################
+from Flashcards_Adder import Flashcards_Adder
+from Flashcards_Editor import Flashcards_Editor
 
 class Flashcards_List(Flashcards_List_Functions):
-    # tree_buttons = False
-    # edit_var = False
+
 
     def __init__(self, window, menu_layout):
-        super().__init__()
         self.menu_layout = menu_layout
         self.window = window
+        self.flashcards_adder = Flashcards_Adder(self, window)
+        self.flashcards_editor = Flashcards_Editor(self, window)
+        self.treeview()
   
-
+#Do edycji!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     def goto_main(self):
         self.menu_layout.render_buttons()
         self.menu_layout.grid_buttons()
         self.menu_layout.create_label()
 
-
-    def create_buttons(self):
-        self.back = tkinter.Button(text="Go back", command =lambda: self.goto_main())
-        self.add_word = tkinter.Button(text="Add word", command = lambda: self.add_word_button_function())
-        
-
-
-    def changes_applied_visible(self):
-        self.change_info.configure(text="Changes applied")
-
-    def create_labels(self):
-        self.change_info = tkinter.Label(text="Waiting for changes")
-        self.word_label = tkinter.Label(self.window.app, text="Word")
-        self.meaning_label = tkinter.Label(self.window.app, text="Meaning")
-        self.note_label = tkinter.Label(self.window.app, text="Note")
-
-
-    def place_entries(self):
-        self.word_entry = tkinter.Entry(self.window.app, font=('Arial 24'))
-        self.meaning_entry = tkinter.Entry(self.window.app, font=('Arial 24'))
-        self.note_entry = tkinter.Entry(self.window.app, font=('Arial 24'))
-
-    def pack_layout(self):
-        self.word_label.pack(fill='both', expand=True)
-        self.word_entry.pack(fill='both', expand=True)
-        self.meaning_label.pack(fill='both', expand=True)
-        self.meaning_entry.pack(fill='both', expand=True)
-        self.note_label.pack(fill='both', expand=True)
-        self.note_entry.pack(fill='both', expand=True)
-
-        self.back.pack(fill='both', expand=True, side='left')
-        self.change_info.pack(fill='both', expand=True, side='left')
-        self.add_word.pack(fill='both', expand=True, side='left')        
-
-
-    def goto_flashcards_adder(self):
-        # self.edit_var = False
-        self.window.clear_window()
-        self.create_labels()
-        self.place_entries()
-        self.create_buttons()
-        self.pack_layout()
 
 
     def create_treeview_buttons(self):
@@ -163,7 +100,7 @@ class Flashcards_List(Flashcards_List_Functions):
 
         button_frame = tkinter.Frame(self.window.app)
 
-        self.add = tkinter.Button(button_frame, text="Add", command=lambda: self.goto_flashcards_adder())
+        self.add = tkinter.Button(button_frame, text="Add", command=lambda: self.flashcards_adder.goto_flashcards_adder())
         self.add.pack(fill="both", expand=True)
 
         self.edit = tkinter.Button(button_frame, text="Edit", command=lambda: self.edit_record())
@@ -182,8 +119,9 @@ class Flashcards_List(Flashcards_List_Functions):
         self.back = tkinter.Button(button_frame, text="Back", command=lambda: self.goto_main())
         self.back.pack(fill="both", expand = True)
 
-
-        button_frame.pack(side="right")
+        self.create_search_entry()
+        self.pack_search_entry()
+        button_frame.pack(side="right", fill='both')
 
         
 
@@ -194,7 +132,21 @@ class Flashcards_List(Flashcards_List_Functions):
         self.create_treeview_buttons()
         self.treeframe.pack(side="left", fill="both", expand=True)
 
+    def create_search_entry(self):
+        self.search_entry_frame = tkinter.Frame(self.window.app)
+
+
+        self.search_entry = tkinter.Entry(self.search_entry_frame)
+        self.search_button = tkinter.Button(self.search_entry_frame, text="Search")
+
+    def pack_search_entry(self):
+        self.search_entry.pack(side="left", fill="both", expand=True)
+        self.search_button.pack(side="left", fill="x", expand=True)
+        self.search_entry_frame.pack(side="top", fill="x")
+
+
     def create_treeview(self):
+
         self.tree = ttk.Treeview(self.treeframe, selectmode="extended")
 
         self.scrollbar = tkinter.Scrollbar(self.treeframe, orient="vertical", command=self.tree.yview)
@@ -205,6 +157,7 @@ class Flashcards_List(Flashcards_List_Functions):
         self.tree.column("word",width=10, minwidth=1, stretch=tkinter.YES)
         self.tree.column("meaning",width=10, minwidth=1)
         self.tree.column("note",width=10, minwidth=1, stretch=tkinter.YES)
+
 
         self.tree.heading("word", text="Word",anchor=tkinter.W)
         self.tree.heading("meaning", text="Meaning",anchor=tkinter.W)
@@ -221,25 +174,18 @@ class Flashcards_List(Flashcards_List_Functions):
 
         
     def edit_record(self):
-        item_to_edit = self.tree.item(self.tree.focus())
+        
+
+        items_to_edit = self.tree.item(self.tree.selection())
 
         self.window.clear_window()
-        self.goto_flashcards_adder()
+        print(items_to_edit)
 
-        self.add_word.destroy()
-
-        self.edit_word = tkinter.Button(text="Edit", command=lambda: self.edit_word_button_function(item_to_edit['values'][0], item_to_edit['values'][1], item_to_edit['values'][2]))
-
-        self.edit_word.pack(fill='both', expand=True, side='right')
+        self.flashcards_editor.goto_flashcards_editor(items_to_edit)
+        
+        
 
 
-        # self.edit_var = True
-
-        self.word_entry.insert(0, f"{item_to_edit['values'][0]}")
-
-        self.meaning_entry.insert(0, f"{item_to_edit['values'][1]}")
-
-        self.note_entry.insert(0, f"{item_to_edit['values'][2]}")
 
 
 

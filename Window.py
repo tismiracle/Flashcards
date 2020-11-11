@@ -19,6 +19,7 @@ class Window():
     def render_window(self):
         self.create_tk_instance()
         self.app.geometry(self.window_size)
+    
 
 #######################################################################################################################
     
@@ -40,10 +41,12 @@ class Menu_Layout():
 
     def show_list_button_commands(self):
         self.window.clear_window()
-        self.flashcards_list_menu_instance.treeview()
+        self.create_flashcards_list_menu_instance()
+        # self.flashcards_list_menu_instance.treeview()
+        # self.flashcards_list_menu_instance.create_search_entry()
+        # self.create_flashcards_list_menu_instance.pack_search_entry()
 
     def start_button_commands(self):
-        # Start(self.window.app, self.window.clear_window, self)
         Start_game(self.window, self)
 
     def exit_button_commands(self):
