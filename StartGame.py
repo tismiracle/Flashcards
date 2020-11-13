@@ -8,14 +8,13 @@ class Start_game(Sql_db):
     correct = True
     correct_counter = 0
 
-    def __init__(self, window, menu_layout):
+    def __init__(self, flashcards_list_instance, window):
+        self.flashcards_list_instance = flashcards_list_instance
         self.window = window
-        self.menu_layout = menu_layout
         self.connect_db()
         self.list_of_flashcards = self.get_from_db("*", "flashcards_examples")        
-        #random.shuffle(self.myresult)    
-        self.window.clear_window()
-        self.render_game_ui()
+        # self.window.clear_window()
+        # self.render_game_ui()
             
     def render_game_ui(self):        
         window_height = self.window.app.winfo_height()
@@ -28,7 +27,7 @@ class Start_game(Sql_db):
         note = tkinter.Label(locked_frame, text=f"Note: {self.list_of_flashcards[self.flashcard_num][3]}", font="Arial 24")
 
         self.answer = tkinter.Entry(entry_frame, font="Arial 24")
-        back_button = tkinter.Button(entry_frame, text="Back", comman=lambda: self.goto_main())
+        back_button = tkinter.Button(entry_frame, text="Back", comman=lambda: self.flashcards_list_instance.treeview())
         self.skip_button = tkinter.Button(entry_frame, text="Skip", command=lambda: self.skip_flashcard())
         next_button = tkinter.Button(entry_frame, text="Next", command=lambda: self.next_button_function())
 
@@ -79,12 +78,6 @@ class Start_game(Sql_db):
             self.window.clear_window()
             self.render_game_ui()
 
-    def goto_main(self):
-        
-        self.menu_layout.render_buttons()
-        self.menu_layout.grid_buttons()
-        self.menu_layout.create_label()
-
 
     def calculate_score(func):
         def inner(self):
@@ -95,7 +88,7 @@ class Start_game(Sql_db):
     def game_endscreen_ui(self):
         self.congrats_label = tkinter.Label(self.window.app, text="That's all!", font="Arial 30")
         self.score_info_label = tkinter.Label(self.window.app, text=f"You've answered on: {self.correct_counter}/{len(self.list_of_flashcards)} flashcards correctly at the first time", wraplength=400, justify='center', font="Arial 16")
-        self.continue_button = tkinter.Button(self.window.app, command=lambda: [self.window.clear_window(), self.goto_main()])
+        self.continue_button = tkinter.Button(self.window.app, command=lambda: [self.window.clear_window(), self.flashcards_list_instance.treeview()])
 
     def pack_game_endscreen_ui(self):
         self.congrats_label.pack()

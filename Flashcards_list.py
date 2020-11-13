@@ -1,12 +1,14 @@
-
+#items_to_edit
 from db_connector import Sql_db
 import tkinter
 from tkinter import ttk
 import csv
 import os
+from StartGame import Start_game
 
 class Flashcards_List_Functions():
     db_connector = Sql_db()
+
 
     def pass_to_remove_from_db(self):
 
@@ -21,8 +23,6 @@ class Flashcards_List_Functions():
 
             self.db_connector.remove_from_db( _word, _meaning, _note)
         
-
-
         self.scrollbar.destroy()
         self.tree.destroy()
         self.create_treeview()
@@ -69,10 +69,14 @@ class Flashcards_List_Functions():
         word_table = self.db_connector.get_from_db("*", "flashcards_examples")
         pass
 
+    def exit_button_commands(self):
+        self.window.app.quit()
+        self.window.app.destroy()
 
-        
-
-
+    def start_game(self):
+        self.window.clear_window()
+        self.start_game_instance.render_game_ui()
+ 
 #################################################################################################################################
 from Flashcards_Adder import Flashcards_Adder
 from Flashcards_Editor import Flashcards_Editor
@@ -85,15 +89,35 @@ class Flashcards_List(Flashcards_List_Functions):
         self.window = window
         self.flashcards_adder = Flashcards_Adder(self, window)
         self.flashcards_editor = Flashcards_Editor(self, window)
+        self.start_game_instance = Start_game(self, self.window)
+
         self.treeview()
+
   
-#Do edycji!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    def goto_main(self):
-        self.menu_layout.render_buttons()
-        self.menu_layout.grid_buttons()
-        self.menu_layout.create_label()
+    def create_menubar(self):
+        self.menubar = tkinter.Menu(self.window.app)
 
+    def create_menus(self):
+        self.filemenu = tkinter.Menu(self.menubar, tearoff=0)
+        self.editmenu = tkinter.Menu(self.menubar, tearoff=0)
+    def menu_commands(self):
+        self.filemenu.add_command(label="Start", command=lambda: self.start_game())
+       # self.filemenu.add_command(label="Open")
+       # self.filemenu.add_command(label="Save")               
+       # self.filemenu.add_command(label="Save as...")
+       # self.filemenu.add_command(label="Close")
 
+       # self.filemenu.add_separator()
+
+        self.filemenu.add_command(label="Exit", command=self.window.app.quit)
+        self.menubar.add_cascade(label="File", menu=self.filemenu)
+        #self.editmenu.add_command(label="Undo")
+
+    def pack_menubar(self):
+        self.create_menubar()
+        self.create_menus()
+        self.menu_commands()
+        self.window.app.config(menu=self.menubar)
 
     def create_treeview_buttons(self):
         window_width = self.window.app.winfo_width()
@@ -116,17 +140,21 @@ class Flashcards_List(Flashcards_List_Functions):
         self.load_from_csv_button.pack(fill='both', expand=True)
 
 
-        self.back = tkinter.Button(button_frame, text="Back", command=lambda: self.goto_main())
-        self.back.pack(fill="both", expand = True)
+        self.exit = tkinter.Button(button_frame, text="Exit", command=lambda: self.exit_button_commands())
+        self.exit.pack(fill="both", expand = True)
 
-        self.create_search_entry()
-        self.pack_search_entry()
+        # self.create_search_entry()
+        # self.pack_search_entry()
         button_frame.pack(side="right", fill='both')
 
         
 
 
     def treeview(self):
+        self.window.clear_window()
+
+        self.pack_menubar()
+
         self.treeframe = tkinter.Frame(self.window.app)
         self.create_treeview()
         self.create_treeview_buttons()
@@ -134,7 +162,6 @@ class Flashcards_List(Flashcards_List_Functions):
 
     def create_search_entry(self):
         self.search_entry_frame = tkinter.Frame(self.window.app)
-
 
         self.search_entry = tkinter.Entry(self.search_entry_frame)
         self.search_button = tkinter.Button(self.search_entry_frame, text="Search")
@@ -163,8 +190,6 @@ class Flashcards_List(Flashcards_List_Functions):
         self.tree.heading("meaning", text="Meaning",anchor=tkinter.W)
         self.tree.heading("note", text="Note",anchor=tkinter.W)
 
-
-
         for value, x in enumerate(self.load_flashcards()):
             self.tree.insert(parent="", index=value, values=(f"{x[1]}",f"{x[2]}",f"{x[3]}"))
 
@@ -182,6 +207,7 @@ class Flashcards_List(Flashcards_List_Functions):
         print(items_to_edit)
 
         self.flashcards_editor.goto_flashcards_editor(items_to_edit)
+
         
         
 
