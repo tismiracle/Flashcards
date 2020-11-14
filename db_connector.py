@@ -54,3 +54,10 @@ class Sql_db:
         records_amount = self.mycursor.fetchall()
         print(records_amount)
         return records_amount
+
+    def search_from_db(self, search_var):
+        self.connect_db()
+        self.mycursor.execute("SELECT *" + "FROM flashcards_examples WHERE WORD LIKE (?)", ("%" + search_var + "%",))
+        var = self.mycursor.fetchall()
+        print("SQL var",  var)
+

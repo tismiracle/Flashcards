@@ -65,9 +65,13 @@ class Flashcards_List_Functions():
 
 
     #needed to be implemented
-    def search_db(self, search):
-        word_table = self.db_connector.get_from_db("*", "flashcards_examples")
-        pass
+    def search(self):
+        var = self.search_entry.get()
+        print(var)
+        self.db_connector.search_from_db(var)
+        
+        # word_table = self.db_connector.get_from_db("*", "flashcards_examples")
+        
 
     def exit_button_commands(self):
         self.window.app.quit()
@@ -143,8 +147,8 @@ class Flashcards_List(Flashcards_List_Functions):
         self.exit = tkinter.Button(button_frame, text="Exit", command=lambda: self.exit_button_commands())
         self.exit.pack(fill="both", expand = True)
 
-        # self.create_search_entry()
-        # self.pack_search_entry()
+        self.create_search_entry()
+        self.pack_search_entry()
         button_frame.pack(side="right", fill='both')
 
         
@@ -164,7 +168,7 @@ class Flashcards_List(Flashcards_List_Functions):
         self.search_entry_frame = tkinter.Frame(self.window.app)
 
         self.search_entry = tkinter.Entry(self.search_entry_frame)
-        self.search_button = tkinter.Button(self.search_entry_frame, text="Search")
+        self.search_button = tkinter.Button(self.search_entry_frame, text="Search", command=lambda: self.search())
 
     def pack_search_entry(self):
         self.search_entry.pack(side="left", fill="both", expand=True)
