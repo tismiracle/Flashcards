@@ -66,9 +66,12 @@ class Flashcards_List_Functions():
 
     #needed to be implemented
     def search(self):
+        self.search_bool = True
         var = self.search_entry.get()
         print(var)
-        self.db_connector.search_from_db(var)
+        self.searched_flashcards = self.db_connector.search_from_db(var)
+        self.render_to_treeview()
+        # self.window.app.update()
         
         # word_table = self.db_connector.get_from_db("*", "flashcards_examples")
         
@@ -87,7 +90,7 @@ from Flashcards_Editor import Flashcards_Editor
 
 class Flashcards_List(Flashcards_List_Functions):
 
-
+    search_bool = False
     def __init__(self, window, menu_layout):
         self.menu_layout = menu_layout
         self.window = window
@@ -169,10 +172,12 @@ class Flashcards_List(Flashcards_List_Functions):
 
         self.search_entry = tkinter.Entry(self.search_entry_frame)
         self.search_button = tkinter.Button(self.search_entry_frame, text="Search", command=lambda: self.search())
+        self.refresh_button = tkinter.Button(self.search_entry_frame, text="Refresh", command=lambda: self.refresh_treeview())
 
     def pack_search_entry(self):
         self.search_entry.pack(side="left", fill="both", expand=True)
         self.search_button.pack(side="left", fill="x", expand=True)
+        self.refresh_button.pack(side="right", fill="x", expand=True)
         self.search_entry_frame.pack(side="top", fill="x")
 
 
@@ -194,14 +199,29 @@ class Flashcards_List(Flashcards_List_Functions):
         self.tree.heading("meaning", text="Meaning",anchor=tkinter.W)
         self.tree.heading("note", text="Note",anchor=tkinter.W)
 
-        for value, x in enumerate(self.load_flashcards()):
-            self.tree.insert(parent="", index=value, values=(f"{x[1]}",f"{x[2]}",f"{x[3]}"))
-
+        # for value, x in enumerate(self.load_flashcards()):
+        #     self.tree.insert(parent="", index=value, values=(f"{x[1]}",f"{x[2]}",f"{x[3]}"))
+        self.render_to_treeview()
         self.tree.pack(fill="both", expand=True, side="left")
         self.scrollbar.pack(fill="both", side="right")
-        
 
-        
+
+    def render_to_treeview(self):
+        self.tree.delete(*self.tree.get_children())
+        if self.search_bool == False:
+            all_flashcards = self.load_flashcards()
+            print("loading all flashcards")
+        else:
+            all_flashcards = self.searched_flashcards
+        for value, x in enumerate(all_flashcards):
+            self.tree.insert(parent="", index=value, values=(f"{x[1]}",f"{x[2]}",f"{x[3]}"))
+        self.search_bool = False
+
+    def refresh_treeview(self):
+        print("I do something")
+        # self.search_bool = False
+        self.render_to_treeview()
+
     def edit_record(self):
         
 

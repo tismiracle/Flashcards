@@ -60,4 +60,5 @@ class Sql_db:
         self.mycursor.execute("SELECT *" + "FROM flashcards_examples WHERE WORD LIKE (?)", ("%" + search_var + "%",))
         var = self.mycursor.fetchall()
         print("SQL var",  var)
+        return var
 
