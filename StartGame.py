@@ -16,7 +16,9 @@ class Start_game(Sql_db):
         # self.window.clear_window()
         # self.render_game_ui()
             
-    def render_game_ui(self):        
+    def render_game_ui(self):
+        self.list_of_flashcards = self.get_from_db("*", "flashcards_examples")
+
         window_height = self.window.app.winfo_height()
         locked_frame = tkinter.Frame(self.window.app, height = window_height//2)
         not_correct_frame = tkinter.Frame(self.window.app, height=window_height//3)

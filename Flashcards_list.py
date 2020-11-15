@@ -66,14 +66,24 @@ class Flashcards_List_Functions():
 
     #needed to be implemented
     def search(self):
-        self.search_bool = True
+        self.search_mode = True
+        filter_values = self.get_states_of_filters()
+
         var = self.search_entry.get()
         print(var)
-        self.searched_flashcards = self.db_connector.search_from_db(var)
+        self.searched_flashcards = self.db_connector.search_from_db(var, filter_values)
+        print(self.searched_flashcards)
+        #żeby wyszukiwało należy to uruchomić
         self.render_to_treeview()
-        # self.window.app.update()
-        
-        # word_table = self.db_connector.get_from_db("*", "flashcards_examples")
+
+
+    def get_states_of_filters(self):
+        filter_values = {}
+        filter_values["word_filter_var"] = self.word_filter_var.get()
+        filter_values["meaning_filter_var"] = self.meaning_filter_var.get()
+        filter_values["note_filter_var"] = self.note_filter_var.get()
+
+        return filter_values
         
 
     def exit_button_commands(self):
@@ -90,7 +100,7 @@ from Flashcards_Editor import Flashcards_Editor
 
 class Flashcards_List(Flashcards_List_Functions):
 
-    search_bool = False
+    search_mode = False
     def __init__(self, window, menu_layout):
         self.menu_layout = menu_layout
         self.window = window
@@ -109,16 +119,9 @@ class Flashcards_List(Flashcards_List_Functions):
         self.editmenu = tkinter.Menu(self.menubar, tearoff=0)
     def menu_commands(self):
         self.filemenu.add_command(label="Start", command=lambda: self.start_game())
-       # self.filemenu.add_command(label="Open")
-       # self.filemenu.add_command(label="Save")               
-       # self.filemenu.add_command(label="Save as...")
-       # self.filemenu.add_command(label="Close")
-
-       # self.filemenu.add_separator()
 
         self.filemenu.add_command(label="Exit", command=self.window.app.quit)
         self.menubar.add_cascade(label="File", menu=self.filemenu)
-        #self.editmenu.add_command(label="Undo")
 
     def pack_menubar(self):
         self.create_menubar()
@@ -167,6 +170,29 @@ class Flashcards_List(Flashcards_List_Functions):
         self.create_treeview_buttons()
         self.treeframe.pack(side="left", fill="both", expand=True)
 
+
+    def create_searching_filters(self):
+        self.filters_frame = tkinter.Frame(self.window.app)
+
+        self.filter_label = tkinter.Label(self.filters_frame, text="Filters:")
+
+        self.word_filter_var = tkinter.IntVar()
+        self.meaning_filter_var = tkinter.IntVar()
+        self.note_filter_var = tkinter.IntVar()
+
+        self.word_filter = tkinter.Checkbutton(self.filters_frame, text="Word", variable=self.word_filter_var)
+        self.meaning_filter = tkinter.Checkbutton(self.filters_frame, text="Meaning", variable=self.meaning_filter_var)
+        self.note_filter = tkinter.Checkbutton(self.filters_frame, text="Note", variable=self.note_filter_var)
+
+    def pack_filters(self):
+        self.create_searching_filters()
+
+        self.filter_label.pack(side="left", fill="both", expand=True)
+        self.word_filter.pack(side="left", fill="both", expand=True)
+        self.meaning_filter.pack(side="left", fill="both", expand=True)
+        self.note_filter.pack(side="left", fill="both", expand=True)
+        self.filters_frame.pack()
+
     def create_search_entry(self):
         self.search_entry_frame = tkinter.Frame(self.window.app)
 
@@ -179,6 +205,7 @@ class Flashcards_List(Flashcards_List_Functions):
         self.search_button.pack(side="left", fill="x", expand=True)
         self.refresh_button.pack(side="right", fill="x", expand=True)
         self.search_entry_frame.pack(side="top", fill="x")
+        self.pack_filters()
 
 
     def create_treeview(self):
@@ -208,18 +235,20 @@ class Flashcards_List(Flashcards_List_Functions):
 
     def render_to_treeview(self):
         self.tree.delete(*self.tree.get_children())
-        if self.search_bool == False:
+        if self.search_mode == False:
             all_flashcards = self.load_flashcards()
             print("loading all flashcards")
+            for value, x in enumerate(all_flashcards):
+                self.tree.insert(parent="", index=value, values=(f"{x[1]}",f"{x[2]}",f"{x[3]}"))
         else:
             all_flashcards = self.searched_flashcards
-        for value, x in enumerate(all_flashcards):
-            self.tree.insert(parent="", index=value, values=(f"{x[1]}",f"{x[2]}",f"{x[3]}"))
-        self.search_bool = False
+            for value, x in enumerate(all_flashcards):
+                self.tree.insert(parent="", index=value, values=(f"{x[1]}",f"{x[2]}",f"{x[3]}"))
+        self.search_mode = False
 
     def refresh_treeview(self):
         print("I do something")
-        # self.search_bool = False
+        self.search_mode = False
         self.render_to_treeview()
 
     def edit_record(self):

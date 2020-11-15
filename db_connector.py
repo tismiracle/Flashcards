@@ -55,10 +55,33 @@ class Sql_db:
         print(records_amount)
         return records_amount
 
-    def search_from_db(self, search_var):
+    def search_from_db(self, search_var, filter_values):
         self.connect_db()
-        self.mycursor.execute("SELECT *" + "FROM flashcards_examples WHERE WORD LIKE (?)", ("%" + search_var + "%",))
-        var = self.mycursor.fetchall()
-        print("SQL var",  var)
-        return var
+        searched_vars = []
+        word_variables = None
+        meaning_variables = None
+        note_variables = None
+        if filter_values.get("word_filter_var") == 1:
+            self.mycursor.execute("SELECT *" + "FROM flashcards_examples WHERE WORD LIKE (?)", ("%" + search_var + "%",))
+            word_variables = self.mycursor.fetchall()
+        if filter_values.get("meaning_filter_var") == 1:
+            self.mycursor.execute("SELECT *" + "FROM flashcards_examples WHERE MEANING LIKE (?)", ("%" + search_var + "%",))
+            meaning_variables = self.mycursor.fetchall()
+        if filter_values.get("note_filter_var") == 1:
+            self.mycursor.execute("SELECT *" + "FROM flashcards_examples WHERE NOTE LIKE (?)", ("%" + search_var + "%",))
+            note_variables = self.mycursor.fetchall()
+
+
+        if not word_variables == None:
+            for item in word_variables:
+                searched_vars.append(item)
+        if not meaning_variables == None:
+            for item in meaning_variables:
+                searched_vars.append(item)
+        if not note_variables == None:
+            for item in note_variables:
+                searched_vars.append(item)
+
+        return searched_vars
+
 
