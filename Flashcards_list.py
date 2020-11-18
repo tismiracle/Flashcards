@@ -39,7 +39,7 @@ class Flashcards_List_Functions():
         table = self.db_connector.get_from_db("*", "flashcards_examples")
         print(table)
         with open("flashcards.csv", "w") as csvfile_write:
-            csv_writer = csv.writer(csvfile_write, delimiter=",")
+            csv_writer = csv.writer(csvfile_write)
             for words in table:
                 csv_writer.writerow(words[1:])  #doing it because the first record in list is None. I'll change it later.
     
@@ -56,7 +56,7 @@ class Flashcards_List_Functions():
         print(csv_file)
 
         with open(csv_file, "r") as myfile:
-            csv_reader = csv.reader(myfile, delimiter=",")
+            csv_reader = csv.reader(myfile)
             for row in csv_reader:
                 self.db_connector.insert_to_db(row[0],row[1],row[2])
 
