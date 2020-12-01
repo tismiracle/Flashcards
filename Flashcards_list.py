@@ -38,12 +38,12 @@ class Flashcards_List_Functions():
         
         table = self.db_connector.get_from_db("*", "flashcards_examples")
         print(table)
-        with open("flashcards.csv", "w") as csvfile_write:
+        with open("flashcards.csv", "w", newline="") as csvfile_write:
             csv_writer = csv.writer(csvfile_write)
             for words in table:
-                csv_writer.writerow(words[1:])  #doing it because the first record in list is None. I'll change it later.
-                #csv_writer.
-    
+                csv_writer.writerow(words[0:])  #doing it because the first record in list is None. I'll change it later.
+
+
     def load_from_csv(self):
         print(self.tree)
         from tkinter import filedialog
@@ -240,11 +240,11 @@ class Flashcards_List(Flashcards_List_Functions):
             all_flashcards = self.load_flashcards()
             print("loading all flashcards")
             for value, x in enumerate(all_flashcards):
-                self.tree.insert(parent="", index=value, values=(f"{x[1]}",f"{x[2]}",f"{x[3]}"))
+                self.tree.insert(parent="", index=value, values=(f"{x[0]}",f"{x[1]}",f"{x[2]}"))
         else:
             all_flashcards = self.searched_flashcards
             for value, x in enumerate(all_flashcards):
-                self.tree.insert(parent="", index=value, values=(f"{x[1]}",f"{x[2]}",f"{x[3]}"))
+                self.tree.insert(parent="", index=value, values=(f"{x[0]}",f"{x[1]}",f"{x[2]}"))
         self.search_mode = False
 
     def refresh_treeview(self):

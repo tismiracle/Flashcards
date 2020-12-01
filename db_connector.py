@@ -15,19 +15,19 @@ class Sql_db:
         self.mydb.commit()
         # self.mycursor.execute("USE flashcards;")
         self.mydb.commit()
-        self.mycursor.execute("""        CREATE TABLE IF NOT EXISTS flashcards_examples (
-            Row_ID int auto_increment
-                primary key,
-            WORD varchar(255),
+        self.mycursor.execute("""CREATE TABLE IF NOT EXISTS flashcards_examples (
+            WORD varchar(255) UNIQUE,
             MEANING varchar(255),
             NOTE varchar(255)
-            )"""
-        )
+            )""")
         self.mydb.commit()
 
     def insert_to_db(self, word, meaning, note):
         command = f"INSERT INTO flashcards_examples (WORD, MEANING, NOTE) VALUES ('{word}','{meaning}', '{note}');" 
-        self.mycursor.execute(command)
+        try:
+            self.mycursor.execute(command)
+        except sqlite3.IntegrityError:
+            messagebox.showerror("Cannot add record",f"Unfortunately you cannot add \"{word}\". Check if word which you are trying to add exists in table.")
         self.mydb.commit()
                 
 
