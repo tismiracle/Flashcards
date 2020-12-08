@@ -23,8 +23,8 @@ class Start_game(Sql_db):
         entry_frame = tkinter.Frame(self.window.app)
 
         
-        word = tkinter.Label(locked_frame, text=f"Meaning: {self.list_of_flashcards[self.flashcard_num][1]}", font="Arial 24")
-        note = tkinter.Label(locked_frame, text=f"Note: {self.list_of_flashcards[self.flashcard_num][2]}", font="Arial 24")
+        word = tkinter.Label(locked_frame, text=f"Meaning: {self.list_of_flashcards[self.flashcard_num][2]}", font="Arial 24")
+        note = tkinter.Label(locked_frame, text=f"Note: {self.list_of_flashcards[self.flashcard_num][3]}", font="Arial 24")
 
         self.answer = tkinter.Entry(entry_frame, font="Arial 24")
         back_button = tkinter.Button(entry_frame, text="Back", comman=lambda: self.flashcards_list_instance.treeview())
@@ -47,7 +47,8 @@ class Start_game(Sql_db):
         entry_frame.pack()
             
     def check_if_correct(self):
-        if self.answer_check == self.list_of_flashcards[self.flashcard_num][0]:
+        # print(self.list_of_flashcards)
+        if self.answer_check == self.list_of_flashcards[self.flashcard_num][1]:
             if self.correct:
                 self.correct_counter += 1
             self.flashcard_num += 1

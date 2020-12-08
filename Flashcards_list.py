@@ -92,6 +92,7 @@ class Flashcards_List_Functions():
         self.window.app.destroy()
 
     def start_game(self):
+        self.start_game_instance = Start_game(self, self.window)
         self.window.clear_window()
         self.start_game_instance.render_game_ui()
  
@@ -105,9 +106,8 @@ class Flashcards_List(Flashcards_List_Functions):
     def __init__(self, window, menu_layout):
         self.menu_layout = menu_layout
         self.window = window
-        self.flashcards_adder = Flashcards_Adder(self, window)
-        self.flashcards_editor = Flashcards_Editor(self, window)
-        self.start_game_instance = Start_game(self, self.window)
+        
+        
 
         self.treeview()
 
@@ -129,13 +129,18 @@ class Flashcards_List(Flashcards_List_Functions):
         self.create_menus()
         self.menu_commands()
         self.window.app.config(menu=self.menubar)
+# class instances methods
+    def flash_add(self):
+        self.flashcards_adder = Flashcards_Adder(self, self.window)
+        self.flashcards_adder.goto_flashcards_adder()
+
 
     def create_treeview_buttons(self):
         window_width = self.window.app.winfo_width()
 
         button_frame = tkinter.Frame(self.window.app)
 
-        self.add = tkinter.Button(button_frame, text="Add", command=lambda: self.flashcards_adder.goto_flashcards_adder())
+        self.add = tkinter.Button(button_frame, text="Add", command=lambda:self.flash_add())
         self.add.pack(fill="both", expand=True)
 
         self.edit = tkinter.Button(button_frame, text="Edit", command=lambda: self.edit_record())
@@ -240,11 +245,11 @@ class Flashcards_List(Flashcards_List_Functions):
             all_flashcards = self.load_flashcards()
             print("loading all flashcards")
             for value, x in enumerate(all_flashcards):
-                self.tree.insert(parent="", index=value, values=(f"{x[0]}",f"{x[1]}",f"{x[2]}"))
+                self.tree.insert(parent="", index=value, values=(f"{x[1]}",f"{x[2]}",f"{x[3]}"))
         else:
             all_flashcards = self.searched_flashcards
             for value, x in enumerate(all_flashcards):
-                self.tree.insert(parent="", index=value, values=(f"{x[0]}",f"{x[1]}",f"{x[2]}"))
+                self.tree.insert(parent="", index=value, values=(f"{x[1]}",f"{x[2]}",f"{x[3]}"))
         self.search_mode = False
 
     def refresh_treeview(self):
@@ -254,6 +259,7 @@ class Flashcards_List(Flashcards_List_Functions):
 
     def edit_record(self):
         
+        self.flashcards_editor = Flashcards_Editor(self, self.window)
 
         items_to_edit = self.tree.item(self.tree.selection())
 
