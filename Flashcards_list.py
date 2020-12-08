@@ -260,7 +260,7 @@ class Flashcards_List(Flashcards_List_Functions):
         self.search_mode = False
 
     def refresh_treeview(self):
-        print("I do something")
+        print("I refresh treeview")
         self.search_mode = False
         self.render_to_treeview()
 
