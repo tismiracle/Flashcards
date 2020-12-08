@@ -106,9 +106,8 @@ class Flashcards_List(Flashcards_List_Functions):
     def __init__(self, window, menu_layout):
         self.menu_layout = menu_layout
         self.window = window
-        
-        
-
+  
+        self.language_list = ['English', 'German']
         self.treeview()
 
   
@@ -129,6 +128,7 @@ class Flashcards_List(Flashcards_List_Functions):
         self.create_menus()
         self.menu_commands()
         self.window.app.config(menu=self.menubar)
+############################################################################        
 # class instances methods
     def flash_add(self):
         self.flashcards_adder = Flashcards_Adder(self, self.window)
@@ -138,30 +138,31 @@ class Flashcards_List(Flashcards_List_Functions):
     def create_treeview_buttons(self):
         window_width = self.window.app.winfo_width()
 
-        button_frame = tkinter.Frame(self.window.app)
+        self.button_frame = tkinter.Frame(self.window.app)
 
-        self.add = tkinter.Button(button_frame, text="Add", command=lambda:self.flash_add())
+        self.add = tkinter.Button(self.button_frame, text="Add", command=lambda:self.flash_add())
         self.add.pack(fill="both", expand=True)
 
-        self.edit = tkinter.Button(button_frame, text="Edit", command=lambda: self.edit_record())
+        self.edit = tkinter.Button(self.button_frame, text="Edit", command=lambda: self.edit_record())
         self.edit.pack(fill="both", expand=True)
 
-        self.remove = tkinter.Button(button_frame, text="Remove", command=lambda: self.pass_to_remove_from_db())
+        self.remove = tkinter.Button(self.button_frame, text="Remove", command=lambda: self.pass_to_remove_from_db())
         self.remove.pack(fill="both", expand=True)
 
-        self.export_to_csv_button = tkinter.Button(button_frame, text="Export to CSV", command=lambda: self.export_to_csv())
+        self.export_to_csv_button = tkinter.Button(self.button_frame, text="Export to CSV", command=lambda: self.export_to_csv())
         self.export_to_csv_button.pack(fill='both', expand=True)
 
-        self.load_from_csv_button = tkinter.Button(button_frame, text="Load from CSV", command=lambda: self.load_from_csv())
+        self.load_from_csv_button = tkinter.Button(self.button_frame, text="Load from CSV", command=lambda: self.load_from_csv())
         self.load_from_csv_button.pack(fill='both', expand=True)
 
 
-        self.exit = tkinter.Button(button_frame, text="Exit", command=lambda: self.exit_button_commands())
+        self.exit = tkinter.Button(self.button_frame, text="Exit", command=lambda: self.exit_button_commands())
         self.exit.pack(fill="both", expand = True)
 
         self.create_search_entry()
         self.pack_search_entry()
-        button_frame.pack(side="right", fill='both')
+        self.lang_option()
+        self.button_frame.pack(side="right", fill='both')
 
         
 
@@ -212,6 +213,15 @@ class Flashcards_List(Flashcards_List_Functions):
         self.refresh_button.pack(side="right", fill="x", expand=True)
         self.search_entry_frame.pack(side="top", fill="x")
         self.pack_filters()
+
+    def lang_option(self):
+        self.lang_option_frm = tkinter.Frame(self.button_frame)
+        variable = tkinter.StringVar(self.window.app)
+        #variable.set()
+
+        self.language_option = tkinter.OptionMenu(self.lang_option_frm, variable, *self.language_list)
+        self.language_option.pack()
+        self.lang_option_frm.pack(side='bottom')
 
 
     def create_treeview(self):
