@@ -99,15 +99,18 @@ class Flashcards_List_Functions():
 #################################################################################################################################
 from Flashcards_Adder import Flashcards_Adder
 from Flashcards_Editor import Flashcards_Editor
+from Option_menu import Option_menu
 
 class Flashcards_List(Flashcards_List_Functions):
 
     search_mode = False
+
     def __init__(self, window, menu_layout):
         self.menu_layout = menu_layout
         self.window = window
-  
-        self.language_list = ['English', 'German']
+        self.option_menu = Option_menu(self.window)
+
+
         self.treeview()
 
   
@@ -161,8 +164,10 @@ class Flashcards_List(Flashcards_List_Functions):
 
         self.create_search_entry()
         self.pack_search_entry()
-        self.lang_option()
+
         self.button_frame.pack(side="right", fill='both')
+
+        self.option_menu.display_widget(self.button_frame)
 
         
 
@@ -214,14 +219,7 @@ class Flashcards_List(Flashcards_List_Functions):
         self.search_entry_frame.pack(side="top", fill="x")
         self.pack_filters()
 
-    def lang_option(self):
-        self.lang_option_frm = tkinter.Frame(self.button_frame)
-        variable = tkinter.StringVar(self.window.app)
-        #variable.set()
-
-        self.language_option = tkinter.OptionMenu(self.lang_option_frm, variable, *self.language_list)
-        self.language_option.pack()
-        self.lang_option_frm.pack(side='bottom')
+    
 
 
     def create_treeview(self):
@@ -242,8 +240,7 @@ class Flashcards_List(Flashcards_List_Functions):
         self.tree.heading("meaning", text="Meaning",anchor=tkinter.W)
         self.tree.heading("note", text="Note",anchor=tkinter.W)
 
-        # for value, x in enumerate(self.load_flashcards()):
-        #     self.tree.insert(parent="", index=value, values=(f"{x[1]}",f"{x[2]}",f"{x[3]}"))
+
         self.render_to_treeview()
         self.tree.pack(fill="both", expand=True, side="left")
         self.scrollbar.pack(fill="both", side="right")
