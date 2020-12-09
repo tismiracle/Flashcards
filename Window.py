@@ -43,7 +43,7 @@ class Menu_Layout():
            
 
     def create_label(self):
-        self.author = tkinter.Label(text="Created by Radosław Ryłko")
+        self.author = tkinter.Label(text="Created by Radoslaw Rylko")
         self.author.pack()
 
     def start_program(self):

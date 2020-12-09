@@ -74,7 +74,7 @@ class Flashcards_List_Functions():
         print(var)
         self.searched_flashcards = self.db_connector.search_from_db(var, filter_values)
         print(self.searched_flashcards)
-        #żeby wyszukiwało należy to uruchomić
+        #zeby wyszukiwalo nalezy to uruchomic
         self.render_to_treeview()
 
 
