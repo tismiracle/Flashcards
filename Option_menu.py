@@ -31,7 +31,7 @@ class Option_menu:
         self.lang_option_frm.pack(side='bottom')
 
     def add_language_button(self):
-        self.add_button = tkinter.Button(self.lang_option_frm, text="New lang")
+        self.add_button = tkinter.Button(self.lang_option_frm, text="New lang", command=lambda: Add_language_window())
     
     def pack_add_language_button(self):
         self.add_button.pack(side='right')
@@ -50,12 +50,46 @@ class Option_menu:
 class Add_language_window:
     def __init__(self):
         self.language_window = tkinter.Toplevel()
+        self.render_widgets()
+
+    def lang_entry(self):
+        self.entry = tkinter.Entry(self.language_window)
+
+    def pack_entry(self):
+        self.entry.pack(side='top')
+    
+    def destroy_toplevel(self):
+        self.language_window.destroy()
 
     def add_lanugage_button(self):
-        self.add_lang = tkinter.Button(self.language_window, text="Add language")
+        self.add_lang = tkinter.Button(self.language_window, text="Add language", command=lambda: [self.insert_to_sql(), self.destroy_toplevel()])
+    
+    def pack_add_btn(self):
+        self.add_lang.pack(side='right')
 
     def cancel_button(self):
-        self.cancel = tkinter.Button
+        self.cancel = tkinter.Button(self.language_window, text="Cancel", command=lambda: self.language_window.destroy())
+
+    def pack_cancel_btn(self):
+        self.cancel.pack(side='left')
+
+    def insert_to_sql(self):
+        language = self.entry.get()
+        if len(language) == 0:
+            tkinter.messagebox.showerror('Cannot add to database', "Please type in the name of the language")
+        else:
+            self.lang_sql = Language_db()
+            self.lang_sql.insert_new_language(str(language))
+            print("Successfuly added")
+
+    def render_widgets(self):
+        self.lang_entry()
+        self.pack_entry()
+        self.add_lanugage_button()
+        self.pack_add_btn()
+        self.cancel_button()
+        self.pack_cancel_btn()
+
 
         
 

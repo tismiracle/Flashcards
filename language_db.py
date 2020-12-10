@@ -16,7 +16,7 @@ class Language_db:
         self.mydb.commit()
     
     def insert_new_language(self, language):
-        self.mycursor.execute(f"""INSERT INTO languages (LANGUAGE) VALUES ({language});""")
+        self.mycursor.execute(f"""INSERT INTO languages (LANGUAGE) VALUES ('{language}');""")
         self.mydb.commit()
 
     def get_languages(self):
