@@ -8,14 +8,15 @@ class Start_game(Sql_db):
     correct = True
     correct_counter = 0
 
-    def __init__(self, flashcards_list_instance, window):
+    def __init__(self, flashcards_list_instance, window, language):
         self.flashcards_list_instance = flashcards_list_instance
+        self.language = language
         self.window = window
         self.connect_db()
-        self.list_of_flashcards = self.get_from_db("*", "flashcards_examples")        
+        self.list_of_flashcards = self.get_from_db("*", "flashcards_examples", self.language)        
             
     def render_game_ui(self):
-        self.list_of_flashcards = self.get_from_db("*", "flashcards_examples")
+        self.list_of_flashcards = self.get_from_db("*", "flashcards_examples", self.language)
 
         window_height = self.window.app.winfo_height()
         locked_frame = tkinter.Frame(self.window.app, height = window_height//2)

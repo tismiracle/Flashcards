@@ -92,7 +92,7 @@ class Flashcards_List_Functions():
         self.window.app.destroy()
 
     def start_game(self):
-        self.start_game_instance = Start_game(self, self.window)
+        self.start_game_instance = Start_game(self, self.window, self.option_menu.variable.get())
         self.window.clear_window()
         self.start_game_instance.render_game_ui()
  
