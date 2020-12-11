@@ -19,7 +19,7 @@ class Flashcards_Adder_Functions:
         _meaning = self.meaning_entry.get()
         _note = self.note_entry.get()
         print(_word, _meaning, _note)
-        self.db_connector.insert_to_db(_word, _meaning, _note)
+        self.db_connector.insert_to_db(self.language_chosen, _word, _meaning, _note)
 
     def clear_entries(self):
         self.word_entry.delete(0, 'end')
@@ -36,8 +36,10 @@ class Flashcards_Adder_Functions:
 
 
 class Flashcards_Adder(Flashcards_Adder_Functions):
-    def __init__(self, flashcards_list_instance, window):
+    def __init__(self, flashcards_list_instance, window, language_chosen):
         self.flashcards_list_instance = flashcards_list_instance
+        self.language_chosen = language_chosen
+        print(self.language_chosen)        
         
         self.window = window
         

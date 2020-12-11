@@ -29,7 +29,7 @@ class Flashcards_List_Functions():
 
 
     def load_flashcards(self):
-        db_records = self.db_connector.get_from_db("*","flashcards_examples")
+        db_records = self.db_connector.get_from_db("*","flashcards_examples", self.option_menu.variable.get())
         return db_records
 
 
@@ -106,10 +106,10 @@ class Flashcards_List(Flashcards_List_Functions):
     search_mode = False
 
     def __init__(self, window, menu_layout):
-        self.menu_layout = menu_layout
         self.window = window
-        self.option_menu = Option_menu(self.window)
-
+        self.menu_layout = menu_layout
+        self.option_menu = Option_menu(self.window, self.render_to_treeview)
+        
 
         self.treeview()
 
@@ -134,7 +134,7 @@ class Flashcards_List(Flashcards_List_Functions):
 ############################################################################        
 # class instances methods
     def flash_add(self):
-        self.flashcards_adder = Flashcards_Adder(self, self.window)
+        self.flashcards_adder = Flashcards_Adder(self, self.window, self.option_menu.variable.get())
         self.flashcards_adder.goto_flashcards_adder()
 
 
@@ -168,6 +168,8 @@ class Flashcards_List(Flashcards_List_Functions):
         self.button_frame.pack(side="right", fill='both')
 
         self.option_menu.display_widget(self.button_frame)
+
+        self.render_to_treeview()
 
         
 
@@ -241,7 +243,7 @@ class Flashcards_List(Flashcards_List_Functions):
         self.tree.heading("note", text="Note",anchor=tkinter.W)
 
 
-        self.render_to_treeview()
+        # self.render_to_treeview()
         self.tree.pack(fill="both", expand=True, side="left")
         self.scrollbar.pack(fill="both", side="right")
 

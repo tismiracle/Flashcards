@@ -3,12 +3,15 @@ from language_db import Language_db
 
 
 class Option_menu:
-    def __init__(self, main_window):
+    def __init__(self, main_window, render_to_treeview):
         self.main_window = main_window
+        self.render_to_treeview = render_to_treeview
+
 
 
     def define_language_option(self):
         self.language_option = tkinter.OptionMenu(self.lang_option_frm, self.variable, *self.language_list)
+        self.language_option.bind("<ButtonRelease-1>", lambda e: self.render_to_treeview())
 
     def pack_language_option(self):   
         self.language_option.pack(side='left')

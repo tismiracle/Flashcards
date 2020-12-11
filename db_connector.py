@@ -23,8 +23,8 @@ class Sql_db:
             )""")
         self.mydb.commit()
 
-    def insert_to_db(self, word, meaning, note):
-        command = f"INSERT INTO flashcards_examples (WORD, MEANING, NOTE) VALUES ('{word}','{meaning}', '{note}');" 
+    def insert_to_db(self, language, word, meaning, note):
+        command = f"INSERT INTO flashcards_examples (LANGUAGE, WORD, MEANING, NOTE) VALUES ('{language}','{word}','{meaning}', '{note}');" 
         try:
             self.mycursor.execute(command)
         except sqlite3.IntegrityError:
@@ -32,9 +32,9 @@ class Sql_db:
         self.mydb.commit()
                 
 
-    def get_from_db(self, column, table):
+    def get_from_db(self, column, table, language):
         
-        self.mycursor.execute(f"SELECT {column} FROM {table};")
+        self.mycursor.execute(f"SELECT {column} FROM {table} WHERE LANGUAGE = '{language}';")
         myresult = self.mycursor.fetchall()
         return myresult
 
