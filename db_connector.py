@@ -17,8 +17,8 @@ class Sql_db:
         self.mydb.commit()
         self.mycursor.execute("""CREATE TABLE IF NOT EXISTS flashcards_examples (
             LANGUAGE varchar(255),
-            WORD varchar(255) UNIQUE,
-            MEANING varchar(255),
+            WORD varchar(255),
+            MEANING varchar(255) UNIQUE,
             NOTE varchar(255)
             )""")
         self.mydb.commit()
@@ -56,20 +56,21 @@ class Sql_db:
         print(records_amount)
         return records_amount
 
-    def search_from_db(self, search_var, filter_values):
+    def search_from_db(self, search_var, filter_values, language):
         self.connect_db()
+        
         searched_vars = []
         word_variables = None
         meaning_variables = None
         note_variables = None
         if filter_values.get("word_filter_var") == 1:
-            self.mycursor.execute("SELECT *" + "FROM flashcards_examples WHERE WORD LIKE (?)", ("%" + search_var + "%",))
+            self.mycursor.execute("SELECT *" + f"FROM flashcards_examples WHERE WORD LIKE (?) AND LANGUAGE = '{language}'", ("%" + search_var + "%",))
             word_variables = self.mycursor.fetchall()
         if filter_values.get("meaning_filter_var") == 1:
-            self.mycursor.execute("SELECT *" + "FROM flashcards_examples WHERE MEANING LIKE (?)", ("%" + search_var + "%",))
+            self.mycursor.execute("SELECT *" + f"FROM flashcards_examples WHERE MEANING LIKE (?) AND LANGUAGE = '{language}'", ("%" + search_var + "%",))
             meaning_variables = self.mycursor.fetchall()
         if filter_values.get("note_filter_var") == 1:
-            self.mycursor.execute("SELECT *" + "FROM flashcards_examples WHERE NOTE LIKE (?)", ("%" + search_var + "%",))
+            self.mycursor.execute("SELECT *" + f"FROM flashcards_examples WHERE NOTE LIKE (?) AND LANGUAGE = '{language}'", ("%" + search_var + "%",))
             note_variables = self.mycursor.fetchall()
 
 

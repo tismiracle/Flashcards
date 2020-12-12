@@ -8,10 +8,19 @@ from StartGame import Start_game
 
 class Flashcards_List_Functions():
     db_connector = Sql_db()
+    def recall_language_state(func):
+        def inner(self):
+            var_language = self.option_menu.variable.get()
+            func(self)
+            self.option_menu.variable.set(var_language)
+        return inner
 
 
+    @recall_language_state
     def pass_to_remove_from_db(self):
-
+        #dodac usuwanie z okreslonego jezyka
+        # var = self.option_menu.variable.get()
+        # self.option_menu.variable.set(var)        
         item_to_delete = self.tree.selection()
         for item in item_to_delete:
             item = self.tree.item(item)
@@ -26,6 +35,8 @@ class Flashcards_List_Functions():
         self.scrollbar.destroy()
         self.tree.destroy()
         self.create_treeview()
+        # self.option_menu.variable.set(var)
+        self.render_to_treeview()
 
 
     def load_flashcards(self):
@@ -66,16 +77,19 @@ class Flashcards_List_Functions():
 
 
     #needed to be implemented
+    @recall_language_state
     def search(self):
+        language = self.option_menu.variable.get()
         self.search_mode = True
         filter_values = self.get_states_of_filters()
 
         var = self.search_entry.get()
         print(var)
-        self.searched_flashcards = self.db_connector.search_from_db(var, filter_values)
+        self.searched_flashcards = self.db_connector.search_from_db(var, filter_values, language)
         print(self.searched_flashcards)
         #zeby wyszukiwalo nalezy to uruchomic
-        self.render_to_treeview()
+        self.render_to_treeview()        
+        # self.option_menu.variable.set(var_language)
 
 
     def get_states_of_filters(self):
@@ -95,6 +109,8 @@ class Flashcards_List_Functions():
         self.start_game_instance = Start_game(self, self.window, self.option_menu.variable.get())
         self.window.clear_window()
         self.start_game_instance.render_game_ui()
+
+
  
 #################################################################################################################################
 from Flashcards_Adder import Flashcards_Adder
@@ -109,10 +125,7 @@ class Flashcards_List(Flashcards_List_Functions):
         self.window = window
         self.menu_layout = menu_layout
         self.option_menu = Option_menu(self.window, self.render_to_treeview)
-        
-
         self.treeview()
-
   
     def create_menubar(self):
         self.menubar = tkinter.Menu(self.window.app)
@@ -136,7 +149,6 @@ class Flashcards_List(Flashcards_List_Functions):
     def flash_add(self):
         self.flashcards_adder = Flashcards_Adder(self, self.window, self.option_menu.variable.get())
         self.flashcards_adder.goto_flashcards_adder()
-
 
     def create_treeview_buttons(self):
         window_width = self.window.app.winfo_width()
@@ -166,12 +178,13 @@ class Flashcards_List(Flashcards_List_Functions):
         self.pack_search_entry()
 
         self.button_frame.pack(side="right", fill='both')
-
-        self.option_menu.display_widget(self.button_frame)
+        self.add_button_frame_attribute(self.option_menu, self.button_frame)
+        self.option_menu.display_widget()
 
         self.render_to_treeview()
 
-        
+    def add_button_frame_attribute(self, obj, val):
+        setattr(obj, "button_frame", val)
 
 
     def treeview(self):
