@@ -32,12 +32,16 @@ class Flashcards_Adder_Functions:
     def goto_flashcards_list(self):
         self.window.clear_window()
         self.flashcards_list_instance.treeview()
+        self.option_menu.variable.set(self.language_chosen)
+        self.refresh_treeview()
 
 
 
 class Flashcards_Adder(Flashcards_Adder_Functions):
-    def __init__(self, flashcards_list_instance, window, language_chosen):
+    def __init__(self, flashcards_list_instance, window, option_menu, language_chosen, refresh_treeview):
         self.flashcards_list_instance = flashcards_list_instance
+        self.refresh_treeview = refresh_treeview
+        self.option_menu = option_menu
         self.language_chosen = language_chosen
         print(self.language_chosen)        
         

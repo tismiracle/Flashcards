@@ -28,6 +28,8 @@ class Flashcards_Editor_Functions:
     def goto_flashcards_list(self):
         self.window.clear_window()
         self.flashcards_list_instance.treeview()
+        self.option_menu.variable.set(self.language_chosen)
+        self.refresh_treeview()
 
     def clear_entries(self):
         self.word_entry.delete(0, 'end')
@@ -39,8 +41,11 @@ class Flashcards_Editor_Functions:
 class Flashcards_Editor(Flashcards_Editor_Functions):
     db_connector = Sql_db()
 
-    def __init__(self, flashcards_list_instance, window):
+    def __init__(self, flashcards_list_instance, window, option_menu, language_chosen, refresh_treeview):
         self.flashcards_list_instance = flashcards_list_instance
+        self.refresh_treeview = refresh_treeview
+        self.option_menu = option_menu
+        self.language_chosen = language_chosen
         self.window = window
 
     def place_entries(self):

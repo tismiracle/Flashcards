@@ -44,18 +44,19 @@ class Flashcards_List_Functions():
         return db_records
 
 
-
+    @recall_language_state
     def export_to_csv(self):
         
-        table = self.db_connector.get_from_db("*", "flashcards_examples")
+        table = self.db_connector.get_from_db("*", "flashcards_examples", self.option_menu.variable.get())
         print(table)
         with open("flashcards.csv", "w", newline="") as csvfile_write:
             csv_writer = csv.writer(csvfile_write)
             for words in table:
                 csv_writer.writerow(words[0:])  #doing it because the first record in list is None. I'll change it later.
 
-
+    @recall_language_state
     def load_from_csv(self):
+        language_chosen = self.option_menu.variable.get()
         print(self.tree)
         from tkinter import filedialog
         my_filetype = [('CSV file', '.csv')]
@@ -70,11 +71,12 @@ class Flashcards_List_Functions():
         with open(csv_file, "r") as myfile:
             csv_reader = csv.reader(myfile)
             for row in csv_reader:
-                self.db_connector.insert_to_db(row[0],row[1],row[2])
+                self.db_connector.insert_to_db(row[0],row[1],row[2],row[3])
 
         self.window.clear_window()
         self.treeview()
-
+        self.option_menu.variable.set(language_chosen)
+        self.refresh_treeview()
 
     #needed to be implemented
     @recall_language_state
@@ -147,7 +149,7 @@ class Flashcards_List(Flashcards_List_Functions):
 ############################################################################        
 # class instances methods
     def flash_add(self):
-        self.flashcards_adder = Flashcards_Adder(self, self.window, self.option_menu.variable.get())
+        self.flashcards_adder = Flashcards_Adder(self, self.window, self.option_menu, self.option_menu.variable.get(), self.refresh_treeview)
         self.flashcards_adder.goto_flashcards_adder()
 
     def create_treeview_buttons(self):
@@ -281,7 +283,7 @@ class Flashcards_List(Flashcards_List_Functions):
 
     def edit_record(self):
         
-        self.flashcards_editor = Flashcards_Editor(self, self.window)
+        self.flashcards_editor = Flashcards_Editor(self, self.window, self.option_menu, self.option_menu.variable.get(), self.refresh_treeview)
 
         items_to_edit = self.tree.item(self.tree.selection())
 
