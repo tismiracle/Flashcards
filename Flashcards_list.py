@@ -40,7 +40,10 @@ class Flashcards_List_Functions():
 
 
     def load_flashcards(self):
-        db_records = self.db_connector.get_from_db("*","flashcards_examples", self.option_menu.variable.get())
+        if self.option_menu.variable.get() == "Default":
+            db_records = self.db_connector.get_from_db("*","flashcards_examples", 1)
+        else:
+            db_records = self.db_connector.get_from_db("*","flashcards_examples", self.option_menu.variable.get())
         return db_records
 
 

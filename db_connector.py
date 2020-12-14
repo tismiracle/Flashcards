@@ -33,8 +33,10 @@ class Sql_db:
                 
 
     def get_from_db(self, column, table, language):
-        
-        self.mycursor.execute(f"SELECT {column} FROM {table} WHERE LANGUAGE = '{language}';")
+        if language == 1:
+            self.mycursor.execute(f"SELECT {column} FROM {table};")
+        else:
+            self.mycursor.execute(f"SELECT {column} FROM {table} WHERE LANGUAGE = '{language}';")
         myresult = self.mycursor.fetchall()
         return myresult
 
@@ -63,15 +65,27 @@ class Sql_db:
         word_variables = None
         meaning_variables = None
         note_variables = None
-        if filter_values.get("word_filter_var") == 1:
-            self.mycursor.execute("SELECT *" + f"FROM flashcards_examples WHERE WORD LIKE (?) AND LANGUAGE = '{language}'", ("%" + search_var + "%",))
-            word_variables = self.mycursor.fetchall()
-        if filter_values.get("meaning_filter_var") == 1:
-            self.mycursor.execute("SELECT *" + f"FROM flashcards_examples WHERE MEANING LIKE (?) AND LANGUAGE = '{language}'", ("%" + search_var + "%",))
-            meaning_variables = self.mycursor.fetchall()
-        if filter_values.get("note_filter_var") == 1:
-            self.mycursor.execute("SELECT *" + f"FROM flashcards_examples WHERE NOTE LIKE (?) AND LANGUAGE = '{language}'", ("%" + search_var + "%",))
-            note_variables = self.mycursor.fetchall()
+        if language == "Default":
+            if filter_values.get("word_filter_var") == 1:
+                self.mycursor.execute("SELECT *" + f"FROM flashcards_examples WHERE WORD LIKE (?)", ("%" + search_var + "%",))
+                word_variables = self.mycursor.fetchall()
+            if filter_values.get("meaning_filter_var") == 1:
+                self.mycursor.execute("SELECT *" + f"FROM flashcards_examples WHERE MEANING LIKE (?)", ("%" + search_var + "%",))
+                meaning_variables = self.mycursor.fetchall()
+            if filter_values.get("note_filter_var") == 1:
+                self.mycursor.execute("SELECT *" + f"FROM flashcards_examples WHERE NOTE LIKE (?)", ("%" + search_var + "%",))
+                note_variables = self.mycursor.fetchall()
+        else:
+
+            if filter_values.get("word_filter_var") == 1:
+                self.mycursor.execute("SELECT *" + f"FROM flashcards_examples WHERE WORD LIKE (?) AND LANGUAGE = '{language}'", ("%" + search_var + "%",))
+                word_variables = self.mycursor.fetchall()
+            if filter_values.get("meaning_filter_var") == 1:
+                self.mycursor.execute("SELECT *" + f"FROM flashcards_examples WHERE MEANING LIKE (?) AND LANGUAGE = '{language}'", ("%" + search_var + "%",))
+                meaning_variables = self.mycursor.fetchall()
+            if filter_values.get("note_filter_var") == 1:
+                self.mycursor.execute("SELECT *" + f"FROM flashcards_examples WHERE NOTE LIKE (?) AND LANGUAGE = '{language}'", ("%" + search_var + "%",))
+                note_variables = self.mycursor.fetchall()
 
 
         if not word_variables == None:
