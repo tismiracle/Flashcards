@@ -20,8 +20,8 @@ class Option_menu:
     def get_langs_from_sql(self):
         self.language_list = ["Default"]
         self.variable = tkinter.StringVar(self.main_window.app)
-        languages_sql = Language_db()
-        langs_list = languages_sql.get_languages()
+        self.languages_sql = Language_db()
+        langs_list = self.languages_sql.get_languages()
         for lang in langs_list:
             self.language_list.append(lang[0])
 
@@ -35,10 +35,13 @@ class Option_menu:
         self.lang_option_frm.pack(side='bottom')
 
     def add_language_button(self):
+        
         self.add_button = tkinter.Button(self.lang_option_frm, text="New lang", command=lambda: Add_language_window(self.display_widget, self.destroy_all_widgets))
-    
+        self.remove_lang = tkinter.Button(self.lang_option_frm, text="Remove lang", command=lambda:self.languages_sql.remove_language_and_words(self.variable.get()))
+        self.remove_lang.bind("<Button1>", print(self.variable.get()))
     def pack_add_language_button(self):
         self.add_button.pack(side='right')
+        self.remove_lang.pack(side='right')
 
     def display_widget(self):
         # self.frame_to_put_in = frame_to_put_in
@@ -75,9 +78,11 @@ class Add_language_window:
     def add_lanugage_button(self):
         self.add_lang = tkinter.Button(self.language_window, text="Add language", command=lambda: [self.insert_to_sql(), self.destroy_toplevel(), self.destroy_all_widgets(), self.display_widget()])
         # self.add_lang.bind("<ButtonRelease-1>", lambda e: self.display_widget())
+        
     
     def pack_add_btn(self):
         self.add_lang.pack(side='right')
+        
 
     def cancel_button(self):
         self.cancel = tkinter.Button(self.language_window, text="Cancel", command=lambda: self.language_window.destroy())

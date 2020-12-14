@@ -1,5 +1,6 @@
 import sqlite3
-
+from db_connector import Sql_db
+import tkinter.messagebox
 class Language_db:
 
     def __init__(self):
@@ -24,3 +25,11 @@ class Language_db:
         records = self.mycursor.fetchall()
         return records
 
+    def remove_language_and_words(self, language_chosen):      
+        if language_chosen == "Default":
+              tkinter.messagebox.showerror("Cannot remove", "Cannot remove default value")
+        else:
+            self.mycursor.execute(f"DELETE FROM languages where LANGUAGE = '{language_chosen}'")
+            self.mydb.commit()
+            word_db = Sql_db()
+            word_db.delete_all(language_chosen)

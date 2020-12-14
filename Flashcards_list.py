@@ -71,7 +71,7 @@ class Flashcards_List_Functions():
         with open(csv_file, "r") as myfile:
             csv_reader = csv.reader(myfile)
             for row in csv_reader:
-                self.db_connector.insert_to_db(row[0],row[1],row[2],row[3])
+                self.db_connector.insert_to_db(language_chosen,row[1],row[2],row[3])
 
         self.window.clear_window()
         self.treeview()

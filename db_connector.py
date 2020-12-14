@@ -86,4 +86,9 @@ class Sql_db:
 
         return searched_vars
 
+    def delete_all(self, language_chosen):
+        self.mycursor.execute(f"DELETE FROM flashcards_examples WHERE LANGUAGE = '{language_chosen}'")
+        self.mydb.commit()
+
+
 
