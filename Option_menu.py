@@ -84,7 +84,7 @@ class Add_language_window:
     def add_lanugage_button(self):
         self.add_lang = tkinter.Button(self.language_window, text="Add language", command=lambda: [self.insert_to_sql(), self.destroy_toplevel(), self.destroy_all_widgets(), self.display_widget()])
         #######
-        self.add_lang.bind("<ButtonRelease-1>", lambda e: self.display_widget())
+        #self.add_lang.bind("<ButtonRelease-1>", lambda e: self.display_widget())
         
     
     def pack_add_btn(self):
