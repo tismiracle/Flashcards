@@ -11,8 +11,10 @@ class Option_menu:
 
 
     def define_language_option(self):
-        self.language_option = tkinter.OptionMenu(self.lang_option_frm, self.variable, *self.language_list)
-        self.language_option.bind("<ButtonRelease-1>", lambda e: self.render_to_treeview())
+        #changed line of code to update treeview automatically 
+        self.language_option = tkinter.OptionMenu(self.lang_option_frm, self.variable, *self.language_list, command=lambda e: self.render_to_treeview())
+        #self.language_option.bind("<Enter>", lambda e: self.render_to_treeview())
+        
 
     def pack_language_option(self):   
         self.language_option.pack(side='left')
@@ -81,7 +83,8 @@ class Add_language_window:
 
     def add_lanugage_button(self):
         self.add_lang = tkinter.Button(self.language_window, text="Add language", command=lambda: [self.insert_to_sql(), self.destroy_toplevel(), self.destroy_all_widgets(), self.display_widget()])
-        # self.add_lang.bind("<ButtonRelease-1>", lambda e: self.display_widget())
+        #######
+        self.add_lang.bind("<ButtonRelease-1>", lambda e: self.display_widget())
         
     
     def pack_add_btn(self):
