@@ -37,7 +37,7 @@ class Option_menu:
     def add_language_button(self):
         
         self.add_button = tkinter.Button(self.lang_option_frm, text="New lang", command=lambda: Add_language_window(self.display_widget, self.destroy_all_widgets))
-        self.remove_lang = tkinter.Button(self.lang_option_frm, text="Remove lang", command=lambda:self.languages_sql.remove_language_and_words(self.variable.get()))
+        self.remove_lang = tkinter.Button(self.lang_option_frm, text="Remove lang", command=lambda:[self.languages_sql.remove_language_and_words(self.variable.get()), self.refresh_widget()])
         self.remove_lang.bind("<Button1>", print(self.variable.get()))
     def pack_add_language_button(self):
         self.add_button.pack(side='right')
@@ -57,6 +57,10 @@ class Option_menu:
         self.lang_option_frm.destroy()
         self.add_button.destroy()
         self.language_option.destroy()
+
+    def refresh_widget(self):
+        self.destroy_all_widgets()
+        self.display_widget()
 
 
 class Add_language_window:

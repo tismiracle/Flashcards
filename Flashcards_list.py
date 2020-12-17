@@ -116,6 +116,8 @@ class Flashcards_List_Functions():
         self.start_game_instance.render_game_ui()
 
 
+
+
  
 #################################################################################################################################
 from Flashcards_Adder import Flashcards_Adder
@@ -225,12 +227,20 @@ class Flashcards_List(Flashcards_List_Functions):
         self.note_filter.pack(side="left", fill="both", expand=True)
         self.filters_frame.pack()
 
+    def refresh_state_of_filters(self):
+        self.word_filter_var.set(0)
+        self.meaning_filter_var.set(0)
+        self.note_filter_var.set(0)
+
+    def clear_search_entry(self):
+        self.search_entry.delete(0, "end")
+
     def create_search_entry(self):
         self.search_entry_frame = tkinter.Frame(self.window.app)
 
         self.search_entry = tkinter.Entry(self.search_entry_frame)
         self.search_button = tkinter.Button(self.search_entry_frame, text="Search", command=lambda: self.search())
-        self.refresh_button = tkinter.Button(self.search_entry_frame, text="Refresh", command=lambda: self.refresh_treeview())
+        self.refresh_button = tkinter.Button(self.search_entry_frame, text="Refresh", command=lambda:[ self.refresh_treeview(), self.refresh_state_of_filters(), self.clear_search_entry()])
 
     def pack_search_entry(self):
         self.search_entry.pack(side="left", fill="both", expand=True)
@@ -285,15 +295,20 @@ class Flashcards_List(Flashcards_List_Functions):
         self.render_to_treeview()
 
     def edit_record(self):
-        
-        self.flashcards_editor = Flashcards_Editor(self, self.window, self.option_menu, self.option_menu.variable.get(), self.refresh_treeview)
-
+        from tkinter import messagebox
         items_to_edit = self.tree.item(self.tree.selection())
-
-        self.window.clear_window()
         print(items_to_edit)
+        if items_to_edit["values"] == "":
+        	messagebox.showerror("Choose item to edit","You need to specify the item to edit")
+        else:
+            self.flashcards_editor = Flashcards_Editor(self, self.window, self.option_menu, self.option_menu.variable.get(), self.refresh_treeview)
 
-        self.flashcards_editor.goto_flashcards_editor(items_to_edit)
+        
+
+            self.window.clear_window()
+            print(items_to_edit)
+
+            self.flashcards_editor.goto_flashcards_editor(items_to_edit)
 
         
         
