@@ -5,7 +5,7 @@ from db_connector import Sql_db
 
 
 class Window():
-    window_size = "400x400"
+    window_size = "600x500"
 
     def create_tk_instance(self):
         self.app = tkinter.Tk()
