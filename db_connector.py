@@ -25,7 +25,7 @@ class Sql_db:
 
     def insert_to_db(self, language, word, meaning, note):
         command = f"INSERT INTO flashcards_examples (LANGUAGE, WORD, MEANING, NOTE) VALUES ('{language}','{word}','{meaning}', '{note}');" 
-        self.mycursor.execute(command)
+        # self.mycursor.execute(command)
         try:
             self.mycursor.execute(command)
         except sqlite3.IntegrityError:
