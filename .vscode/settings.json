@@ -1,3 +1,12 @@
 {
-    "python.pythonPath": "/usr/local/bin/python3"
+    "python.pythonPath": "/usr/local/bin/python3",
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "flashcards_examples",
+            "database": "${workspaceFolder:Flashcards}/flashcards.db3"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
 }
