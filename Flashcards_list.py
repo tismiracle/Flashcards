@@ -53,12 +53,13 @@ class Flashcards_List_Functions():
         table = self.db_connector.get_from_db("*", "flashcards_examples", self.option_menu.variable.get())
         print(table)
         with open("flashcards.csv", "w", newline="") as csvfile_write:
-            csv_writer = csv.writer(csvfile_write, delimiter="|")
+            csv_writer = csv.writer(csvfile_write, delimiter="|", quotechar=',')
             for words in table:
                 csv_writer.writerow(words[0:])  #doing it because the first record in list is None. I'll change it later.
 
     @recall_language_state
     def load_from_csv(self):
+        num_er = 0
         language_chosen = self.option_menu.variable.get()
         print(self.tree)
         from tkinter import filedialog
@@ -71,12 +72,18 @@ class Flashcards_List_Functions():
 
         print(csv_file)
 
-        with open(csv_file, "r") as myfile:
+        with open(csv_file, "r", encoding="utf8") as myfile:
             csv_reader = csv.reader(myfile, delimiter="|", quotechar=',')
             print(csv_reader)
             for row in csv_reader:
+                
                 print(row)
-                self.db_connector.insert_to_db(language_chosen,row[1],row[2],row[3])
+                self.db_connector.insert_to_db(language_chosen,row[0],row[1],row[2])
+                # try:
+                #     self.db_connector.insert_to_db(language_chosen,row[1],row[2],row[3])
+                # except:
+                #     num_er += 1
+            print(num_er, "tyle błędów")
 
         self.window.clear_window()
         self.treeview()

@@ -1,5 +1,6 @@
 import tkinter
 from db_connector import Sql_db
+from tkinter import messagebox
 
 
 class Flashcards_Adder_Functions:
@@ -15,9 +16,12 @@ class Flashcards_Adder_Functions:
         self.changes_applied_visible()
 
     def pass_to_add_to_db(self):
+        
         _word = self.word_entry.get()
         _meaning = self.meaning_entry.get()
         _note = self.note_entry.get()
+        if _note == "":
+            _note = "-"
         print(_word, _meaning, _note)
         self.db_connector.insert_to_db(self.language_chosen, _word, _meaning, _note)
 
