@@ -20,7 +20,7 @@ class Option_menu:
         self.language_option.pack(side='left')
 
     def get_langs_from_sql(self):
-        self.language_list = ["Default"]
+        self.language_list = ["All"]
         self.variable = tkinter.StringVar(self.main_window.app)
         self.languages_sql = Language_db()
         langs_list = self.languages_sql.get_languages()

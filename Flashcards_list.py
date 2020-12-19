@@ -40,7 +40,7 @@ class Flashcards_List_Functions():
 
 
     def load_flashcards(self):
-        if self.option_menu.variable.get() == "Default":
+        if self.option_menu.variable.get() == "All":
             db_records = self.db_connector.get_from_db("*","flashcards_examples", 1)
         else:
             db_records = self.db_connector.get_from_db("*","flashcards_examples", self.option_menu.variable.get())
@@ -76,7 +76,7 @@ class Flashcards_List_Functions():
             print(csv_reader)
             for row in csv_reader:
                 print(row)
-                self.db_connector.insert_to_db(language_chosen,row[0],row[1],row[2])
+                self.db_connector.insert_to_db(language_chosen,row[1],row[2],row[3])
 
         self.window.clear_window()
         self.treeview()
