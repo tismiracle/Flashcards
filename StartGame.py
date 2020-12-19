@@ -16,6 +16,7 @@ class Start_game(Sql_db):
         self.list_of_flashcards = self.get_from_db("*", "flashcards_examples", self.language)        
             
     def render_game_ui(self):
+        #there's a bug in which when you chose All flashcards game doesnt work
         self.list_of_flashcards = self.get_from_db("*", "flashcards_examples", self.language)
 
         window_height = self.window.app.winfo_height()
@@ -24,8 +25,8 @@ class Start_game(Sql_db):
         entry_frame = tkinter.Frame(self.window.app)
 
         
-        word = tkinter.Label(locked_frame, text=f"Meaning: {self.list_of_flashcards[self.flashcard_num][2]}", font="Arial 24")
-        note = tkinter.Label(locked_frame, text=f"Note: {self.list_of_flashcards[self.flashcard_num][3]}", font="Arial 24")
+        word = tkinter.Label(locked_frame, text=f"Meaning: {self.list_of_flashcards[self.flashcard_num][1]}", font="Arial 24")
+        note = tkinter.Label(locked_frame, text=f"Note: {self.list_of_flashcards[self.flashcard_num][2]}", font="Arial 24")
 
         self.answer = tkinter.Entry(entry_frame, font="Arial 24")
         back_button = tkinter.Button(entry_frame, text="Back", comman=lambda: self.flashcards_list_instance.treeview())
