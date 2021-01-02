@@ -22,6 +22,8 @@ class Flashcards_Editor_Functions:
         _edited_word = self.word_entry.get()
         _edited_meaning = self.meaning_entry.get()
         _edited_note = self.note_entry.get()
+        if _edited_note == "":
+            _edited_note = "-"
 
         self.db_connector.edit_db(self.word_before, self.meaning_before, self.note_before, _edited_word, _edited_meaning, _edited_note)
 

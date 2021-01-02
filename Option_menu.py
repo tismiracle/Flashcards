@@ -12,9 +12,9 @@ class Option_menu:
 
     def define_language_option(self):
         #changed line of code to update treeview automatically 
-        self.language_option = tkinter.OptionMenu(self.lang_option_frm, self.variable, *self.language_list, command=lambda e: self.render_to_treeview())
-        #self.language_option.bind("<Enter>", lambda e: self.render_to_treeview())
-        
+        self.language_option = tkinter.OptionMenu(self.lang_option_frm, self.variable, *self.language_list)
+        self.language_option.bind("<ButtonRelease-1>", lambda x: self.render_to_treeview())
+
 
     def pack_language_option(self):   
         self.language_option.pack(side='left')
@@ -40,7 +40,8 @@ class Option_menu:
         
         self.add_button = tkinter.Button(self.lang_option_frm, text="New lang", command=lambda: Add_language_window(self.display_widget, self.destroy_all_widgets))
         self.remove_lang = tkinter.Button(self.lang_option_frm, text="Remove lang", command=lambda:[self.languages_sql.remove_language_and_words(self.variable.get()), self.refresh_widget()])
-        self.remove_lang.bind("<Button1>", print(self.variable.get()))
+        # self.remove_lang.bind("<Button1>", print(self.variable.get()))
+        # self.add_button.bind("<Button-1>", lambda x: self.render_to_treeview())
     def pack_add_language_button(self):
         self.add_button.pack(side='right')
         self.remove_lang.pack(side='right')

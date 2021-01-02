@@ -17,8 +17,8 @@ class Sql_db:
         self.mydb.commit()
         self.mycursor.execute("""CREATE TABLE IF NOT EXISTS flashcards_examples (
             LANGUAGE varchar(255),
-            WORD varchar(255) UNIQUE,
-            MEANING varchar(255),
+            WORD varchar(255),
+            MEANING varchar(255) UNIQUE,
             NOTE varchar(255)
             )""")
         self.mydb.commit()

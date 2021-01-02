@@ -5,6 +5,7 @@ from tkinter import ttk
 import csv
 import os
 from StartGame import Start_game
+from tkinter import messagebox
 
 class Flashcards_List_Functions():
     db_connector = Sql_db()
@@ -49,13 +50,19 @@ class Flashcards_List_Functions():
 
     @recall_language_state
     def export_to_csv(self):
+        if os.path.exists("flashcards.csv"):
+            yes_no = messagebox.askyesno("Are you sure?", "Do you want to override existing file?")
+            if yes_no:
+                table = self.db_connector.get_from_db("*", "flashcards_examples", self.option_menu.variable.get())
+                print(table)
+                with open("flashcards.csv", "w", newline="") as csvfile_write:
+                    csv_writer = csv.writer(csvfile_write, delimiter="|", quotechar=',')
+                    for words in table:
+                        csv_writer.writerow(
+                            words[0:])  # doing it because the first record in list is None. I'll change it later.
+
         
-        table = self.db_connector.get_from_db("*", "flashcards_examples", self.option_menu.variable.get())
-        print(table)
-        with open("flashcards.csv", "w", newline="") as csvfile_write:
-            csv_writer = csv.writer(csvfile_write, delimiter="|", quotechar=',')
-            for words in table:
-                csv_writer.writerow(words[0:])  #doing it because the first record in list is None. I'll change it later.
+
 
     @recall_language_state
     def load_from_csv(self):
@@ -78,11 +85,8 @@ class Flashcards_List_Functions():
             for row in csv_reader:
                 
                 print(row)
-                self.db_connector.insert_to_db(language_chosen,row[0],row[1],row[2])
-                # try:
-                #     self.db_connector.insert_to_db(language_chosen,row[1],row[2],row[3])
-                # except:
-                #     num_er += 1
+                self.db_connector.insert_to_db(language_chosen,row[1],row[2],row[3])
+
             print(num_er, "tyle błędów")
 
         self.window.clear_window()
@@ -163,8 +167,11 @@ class Flashcards_List(Flashcards_List_Functions):
 ############################################################################        
 # class instances methods
     def flash_add(self):
-        self.flashcards_adder = Flashcards_Adder(self, self.window, self.option_menu, self.option_menu.variable.get(), self.refresh_treeview)
-        self.flashcards_adder.goto_flashcards_adder()
+        if self.option_menu.variable.get() == "All":
+            messagebox.showerror("Cannot add flashcard","Please choose proper language")
+        else:
+            self.flashcards_adder = Flashcards_Adder(self, self.window, self.option_menu, self.option_menu.variable.get(), self.refresh_treeview)
+            self.flashcards_adder.goto_flashcards_adder()
 
     def create_treeview_buttons(self):
         window_width = self.window.app.winfo_width()
