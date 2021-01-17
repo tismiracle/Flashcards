@@ -50,16 +50,18 @@ class Flashcards_List_Functions():
 
     @recall_language_state
     def export_to_csv(self):
-        if os.path.exists("flashcards.csv"):
-            yes_no = messagebox.askyesno("Are you sure?", "Do you want to override existing file?")
-            if yes_no:
-                table = self.db_connector.get_from_db("*", "flashcards_examples", self.option_menu.variable.get())
-                print(table)
-                with open("flashcards.csv", "w", newline="") as csvfile_write:
-                    csv_writer = csv.writer(csvfile_write, delimiter="|", quotechar=',')
-                    for words in table:
-                        csv_writer.writerow(
-                            words[0:])  # doing it because the first record in list is None. I'll change it later.
+        if self.option_menu.variable.get() != "All":
+            if os.path.exists("flashcards.csv"):
+                yes_no = messagebox.askyesno("Are you sure?", "Do you want to override existing file?")
+                if yes_no:
+                    table = self.db_connector.get_from_db("*", "flashcards_examples", self.option_menu.variable.get())
+                    print(table)
+                    with open("flashcards.csv", "w", newline="") as csvfile_write:
+                        csv_writer = csv.writer(csvfile_write, delimiter="|", quotechar=',')
+                        for words in table:
+                            csv_writer.writerow(words[0:])  # doing it because the first record in list is None. I'll change it later.
+        else:
+            messagebox.showerror("Cannot export","Choose language to export")
 
         
 
@@ -124,9 +126,12 @@ class Flashcards_List_Functions():
         self.window.app.destroy()
 
     def start_game(self):
-        self.start_game_instance = Start_game(self, self.window, self.option_menu.variable.get())
-        self.window.clear_window()
-        self.start_game_instance.render_game_ui()
+        if self.option_menu.variable.get() == "All":
+            messagebox.showerror("Error", "Choose the language in option menu.")
+        else:
+            self.start_game_instance = Start_game(self, self.window, self.option_menu.variable.get())
+            self.window.clear_window()
+            self.start_game_instance.render_game_ui()
 
 
 
